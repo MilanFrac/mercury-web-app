@@ -7,14 +7,18 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import TextField from '@mui/material/TextField';
 
 function Header() {
+  const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
   return (
     <Navbar fixed='top' expand="lg" className="bg-body-tertiary">
       <Container fluid>
         <Navbar.Brand as={Link} to="/" href="#">Rolltex</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
+          
           <Nav
             className="me-auto my-2 my-lg-0"
             style={{ maxHeight: '100px' }}
@@ -27,15 +31,17 @@ function Header() {
               <NavDropdown.Item as={NavLink} to="/matarnia">Matarnia</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/pruszczGdanski">Pruszcz Gdański</NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/tczew">Tczew</NavDropdown.Item>
-
             </NavDropdown>
-            <Nav.Link href="#action6">Historia</Nav.Link>
-            {/* Pozostałe elementy nawigacji */}
+
+            <Nav.Link as={NavLink} to="/dashboard" style={{ marginRight:'10px', marginLeft:'10px'}}>Panel Pracownika</Nav.Link>
+
+            
             <Button as={Link} to="/forms" variant="outline-success">Utwórz</Button>
           </Nav>
           <Form className="d-flex">
-            {/* Pozostałe elementy formularza */}
           </Form>
+          <TextField id="outlined-search" label="Szukaj" type="search" size='small'/>
+
           <Button variant="outline-danger">Wyloguj</Button>
         </Navbar.Collapse>
       </Container>

@@ -10,13 +10,14 @@ import {
 import "./App.css";
 import Header from "./Components/Header";
 import Calendar from "./routes/Calendar";
-import ErrorPage from "./routes/ErrorPage";
+import ErrorPage from "./routes/Errors/ErrorPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Matarnia from "./routes/Matarnia";
 import CityMeble from "./routes/CityMeble";
+import Dashboard from "./routes/Dashboard";
 import PruszczGdański from "./routes/PruszczGdański";
 import Tczew from "./routes/Tczew";
-import Forms from "./routes/Forms";
+import Form from "./routes/Form"
 import FullInfo from "./routes/FullInfo";
 const AppLayout = () => {
   return (
@@ -55,11 +56,16 @@ const router = createBrowserRouter([
       },
       {
         path: "forms",
-        element: <Forms/>
+        element: <Form/>
       },
       {
         path: "fullInfo",
         element: <FullInfo/>
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard/>
+
       }
     ],
   },

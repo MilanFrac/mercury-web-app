@@ -1,40 +1,16 @@
+// CalendarComponent.js
 import React, { Component } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
-import "moment/locale/pl";
-import moment from "moment";
+import "dayjs/locale/pl";
+import dayjs from "dayjs";
 import EventModal from "../Components/CalendarComponents/EventModal";
-import AddEventModal from "./AddEventModal";
+import AddEventModal from "./Modals/AddEventModal";
 
-moment.updateLocale("pl", {
-  weekdays: [
-    "Poniedziałek",
-    "Wtorek",
-    "Środa",
-    "Czwartek",
-    "Piątek",
-    "Sobota",
-    "Niedziela"
-  ],
-  weekdaysShort: ["Pon", "Wt", "Śr", "Czw", "Pt", "Sb", "Nd"],
-  months: [
-    "Styczeń",
-    "Luty",
-    "Marzec",
-    "Kwiecień",
-    "Maj",
-    "Czerwiec",
-    "Lipiec",
-    "Sierpień",
-    "Wrzesień",
-    "Październik",
-    "Listopad",
-    "Grudzień"
-  ]
-});
+dayjs.locale("pl");
 
-const localizer = momentLocalizer(moment);
+const localizer = dayjsLocalizer(dayjs);
 
 class CalendarComponent extends Component {
   state = {
