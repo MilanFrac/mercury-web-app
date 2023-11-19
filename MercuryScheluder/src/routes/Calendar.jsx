@@ -6,7 +6,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import "dayjs/locale/pl";
 import dayjs from "dayjs";
 import EventModal from "../Components/CalendarComponents/EventModal";
-import AddEventModal from "./Modals/AddEventModal";
 
 dayjs.locale("pl");
 
