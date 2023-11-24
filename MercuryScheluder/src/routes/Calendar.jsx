@@ -1,4 +1,3 @@
-// CalendarComponent.js
 import React, { Component } from "react";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -13,41 +12,14 @@ const localizer = dayjsLocalizer(dayjs);
 
 class CalendarComponent extends Component {
   state = {
-    newEvent: { title: "", start: new Date(), end: new Date() },
     allEvents: [],
     selectedEvent: null,
     isModalOpen: false,
     isResponsive: false
   };
 
-  handleAddEvent = () => {
-    const { newEvent, allEvents } = this.state;
-    if (newEvent.title.trim() === "") {
-      alert("Tytuł jest wymagany.");
-      return;
-    }
-    this.setState({
-      allEvents: [...allEvents, newEvent],
-      newEvent: { title: "", start: new Date(), end: new Date() },
-      isModalOpen: false
-    });
-  };
-
   handleEventClick = (event) => {
     this.setState({ selectedEvent: event });
-  };
-
-  openModal = () => {
-    this.setState({ isModalOpen: true });
-  };
-
-  closeModal = () => {
-    this.setState({ isModalOpen: false });
-  };
-
-  handleDoubleClickEvent = (event) => {
-    this.setState({ selectedEvent: null });
-    this.setState({ isModalOpen: true });
   };
 
   handleResize = () => {
@@ -75,7 +47,14 @@ class CalendarComponent extends Component {
     const dayFormat = isResponsive ? 'ddd' : 'dddd';
 
     return (
-      <div className="App">
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '80vh',
+        }}
+      >
         <Calendar
           localizer={localizer}
           events={allEvents}
