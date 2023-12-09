@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useCallback } from "react";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,8 +18,14 @@ class CalendarComponent extends Component {
     isResponsive: false
   };
 
+  handleNoopClick = (slot) => {
+    alert('You managed it!!! Bravissimo! <3 ' + slot.start);
+    //this.setState({ isModalOpen: true });
+  }
+
   handleEventClick = (event) => {
     this.setState({ selectedEvent: event });
+    alert('You clicked on event!');
   };
 
   handleResize = () => {
@@ -63,6 +69,8 @@ class CalendarComponent extends Component {
           style={{ height: 700, margin: "50px", width: "100%" }}
           onSelectEvent={this.handleEventClick}
           onDoubleClickEvent={this.handleDoubleClickEvent}
+          onSelectSlot={this.handleNoopClick}
+          selectable={true}
           views={{
             month: true,
             week: true,
@@ -85,13 +93,13 @@ class CalendarComponent extends Component {
             event={selectedEvent}
             closeModal={this.closeEventDetails}
           />
-        )}
-        {isModalOpen && (
+        )} 
+        {/* {isModalOpen && (
           <AddEventModal
             closeModal={this.closeModal}
             onSave={this.handleAddEvent}
           />
-        )}
+        )} */}
       </div>
     );
   }
