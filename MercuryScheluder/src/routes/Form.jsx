@@ -1,114 +1,269 @@
-import * as React from 'react';
+
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider, DatePicker, TimePicker, plPL } from '@mui/x-date-pickers';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from 'react-bootstrap/Button';
-import plLocale from 'dayjs/locale/pl';
-import 'dayjs/locale/pl';
+import { format } from 'date-fns';
+import plLocale from 'date-fns/locale/pl';
 
-export default function FixedTags() {
+const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
   const services = [
     { title: 'Montaż' },
     { title: 'Reklamacja' },
     { title: 'Pomiar' },
   ];
 
-  const fixedOptions = [services[0]];
-  const [value, setValue] = React.useState([...fixedOptions, services[2]]);
+  const [value, setValue] = React.useState([]);
+  const [selectedDate, setSelectedDate] = React.useState(() => new Date());
+
+  const [personalData, setPersonalData] = React.useState({
+    imie: '',
+    nazwisko: '',
+    numerTelefonu: '+48',
+    adresMailowy: '',
+    miasto: '',
+    ulica: '',
+    kodPocztowy: 'xx-xxx',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const formatDate = (date, formatString) => format(date, formatString, { locale: plLocale });
+
+  const handleAddEvent = () => {
+    // Walidacja pól
+    const newErrors = {};
+
+    if (!personalData.imie.trim()) {
+      newErrors.imie = 'Imię jest wymagane';
+    }
+
+    if (!personalData.nazwisko.trim()) {
+      newErrors.nazwisko = 'Nazwisko jest wymagane';
+    }
+
+    if (!personalData.adresMailowy.includes('@')) {
+      newErrors.adresMailowy = 'Nieprawidłowy adres email';
+    }
+
+    if (!personalData.miasto.trim() || /\d/.test(personalData.miasto)) {
+      newErrors.miasto = 'Miasto jest wymagane i nie może zawierać cyfr';
+    }
+
+    if (!/^[A-Za-z]+\s\d+$/.test(personalData.ulica)) {
+      newErrors.ulica = 'Ulica musi zawierać słowo i cyfrę (np. Nazwowa 123)';
+    }
+
+    if (!/^\d{2}-\d{3}$/.test(personalData.kodPocztowy)) {
+      newErrors.kodPocztowy = 'Nieprawidłowy format kodu pocztowego (np. 80-000)';
+    }
+
+    if (value.length === 0) {
+      newErrors.services = 'Usługa jest wymagana';
+    }
+
+    // Walidacja numeru telefonu
+    if (!/^\+48\d{0,9}$/.test(personalData.numerTelefonu)) {
+      newErrors.numerTelefonu = 'Nieprawidłowy numer telefonu';
+    }
+
+    // Jeśli są błędy, ustaw je w stanie i nie kontynuuj
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Reszta kodu pozostaje bez zmian
+    const newEvent = {
+      title: value.map((service) => service.title).join(', '),
+      start: selectedDate,
+      end: selectedDate,
+      ...personalData,
+    };
+
+    console.log('Nowe wydarzenie:', newEvent);
+
+    // Wywołaj funkcję przekazaną jako prop do dodania nowego wydarzenia
+    onAddEvent(newEvent);
+
+    // Zaktualizuj stan wszystkich wydarzeń w komponencie Form
+    setAllEvents?.((prevEvents) => [...prevEvents, newEvent]);
+
+    onCloseModal();
+  };
+
+  const handleCancel = () => {
+    onCloseModal();
+  };
 
   return (
     <Box
       component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleAddEvent();
+      }}
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '40ch' },
+        background: '#',
+        maxWidth: '80%',
+        width: '800px',
+        '& .MuiTextField-root': { m: 1, width: '100%' },
+        margin: 'auto',
       }}
       noValidate
       autoComplete="off"
     >
-      <br />
-      <h1>Utwórz zdarzenie</h1>
-      <br />
-      <h7>Dane Personalne</h7>
-      <div/>
-        <TextField 
-          id="outlined-required-imie"
-          label="Imie"
-          style={{ marginRight:'40px'}}
-        />
-        <TextField
-          id="outlined-required-nazwisko"
-          label="Nazwisko"
-        />
-        <br/>
-        <h7>Dane Kontaktowe</h7>
-        <div />
-        <TextField
-          id="outlined-required-numer-telefonu"
-          label="Numer Telefonu"
-          defaultValue="+48"
-          style={{ marginRight:'40px'}}
-        />
-        <TextField
-          id="outlined-required-adres-mailowy"
-          label="Adres Mailowy"
-        />
-        <br/>
-        <h7>Adres</h7>
-        <div />
-        <TextField
-          id="outlined-required-miasto"
-          label="Miasto"
-          style={{ marginRight:'40px'}}
-        />
-        <TextField
-          id="outlined-required-ulica"
-          label="Ulica"
-        />
-        <div/>
-        <TextField
-          id="outlined-required-kod-pocztowy"
-          label="Kod Pocztowy"
-          defaultValue="xx-xxx"
-        />
-
-<br/>
-<h7>czas</h7>
-<div>
-  <LocalizationProvider dateAdapter={AdapterDayjs} locale={plLocale}>
-    <TimePicker label="Godzina" />
-    <DatePicker 
-      label="Dzień" 
-      firstDayOfWeek={1} 
+      <TextField
+      id="standard-basic"
+      label="Imię"
+      variant="standard"
+      fullWidth
+      value={personalData.imie}
+      onChange={(e) => {
+        const newValue = e.target.value;
+        // Sprawdź, czy wartość zawiera tylko litery
+        if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
+          setPersonalData((prevData) => ({ ...prevData, imie: newValue }));
+          setErrors((prevErrors) => ({ ...prevErrors, imie: '' }));
+        } else {
+          setErrors((prevErrors) => ({ ...prevErrors, imie: 'Imię może zawierać tylko litery' }));
+        }
+      }}
+      error={Boolean(errors.imie)}
+      helperText={errors.imie}
     />
-  </LocalizationProvider>
-</div>
-
-<br/>
-<h7>Rodzaj Usługi</h7>
-
-<Autocomplete
-  multiple
-  size='small'
-  limitTags={2}
-  id="multiple-limit-tags"
-  options={services}
-  getOptionLabel={(option) => option.title}
-  renderInput={(params) => (
-    <TextField {...params} label="Usługa" placeholder="Usługa" />
-  )}
+  <TextField
+  id="standard-basic"
+  label="Nazwisko"
+  variant="standard"
+  fullWidth
+  value={personalData.nazwisko}
+  onChange={(e) => {
+    const newValue = e.target.value;
+    // Sprawdź, czy wartość zawiera tylko litery
+    if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
+      setPersonalData((prevData) => ({ ...prevData, nazwisko: newValue }));
+      setErrors((prevErrors) => ({ ...prevErrors, nazwisko: '' }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, nazwisko: 'Nazwisko może zawierać tylko litery' }));
+    }
+  }}
+  error={Boolean(errors.nazwisko)}
+  helperText={errors.nazwisko}
 />
-
-<div>
-  <Button variant="warning" style={{ marginRight: '60px' }}>
-    Anuluj
-  </Button>
-  <Button variant="success">Zatwierdź</Button>
-</div>
-
+      <TextField
+  id="standard-basic"
+  label="Numer Telefonu"
+  variant="standard"
+  fullWidth
+  value={personalData.numerTelefonu}
+  onChange={(e) => {
+    // Sprawdź, czy wartość zaczyna się od "+48" i ma maksymalnie 12 znaków
+    const newValue = e.target.value;
+    if (newValue.startsWith('+48') && newValue.length <= 12) {
+      setPersonalData((prevData) => ({ ...prevData, numerTelefonu: newValue }));
+      setErrors((prevErrors) => ({ ...prevErrors, numerTelefonu: '' }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, numerTelefonu: 'Nieprawidłowy numer telefonu' }));
+    }
+  }}
+  error={Boolean(errors.numerTelefonu)}
+  helperText={errors.numerTelefonu}
+/>
+      <TextField
+        id="standard-basic"
+        label="Adres Mailowy"
+        variant="standard"
+        fullWidth
+        value={personalData.adresMailowy}
+        onChange={(e) => setPersonalData((prevData) => ({ ...prevData, adresMailowy: e.target.value }))}
+        error={Boolean(errors.adresMailowy)}
+        helperText={errors.adresMailowy}
+      />
+      <TextField
+        id="standard-basic"
+        label="Miasto"
+        variant="standard"
+        fullWidth
+        value={personalData.miasto}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          // Sprawdź, czy wartość zawiera tylko litery
+          if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
+            setPersonalData((prevData) => ({ ...prevData, miasto: newValue }));
+            setErrors((prevErrors) => ({ ...prevErrors, miasto: '' }));
+          } else {
+            setErrors((prevErrors) => ({ ...prevErrors, miasto: 'Miasto może zawierać tylko litery' }));
+          }
+        }}
+        error={Boolean(errors.miasto)}
+        helperText={errors.miasto}
+      />
+      <TextField
+        id="standard-basic"
+        label="Ulica"
+        variant="standard"
+        fullWidth
+        value={personalData.ulica}
+        onChange={(e) => setPersonalData((prevData) => ({ ...prevData, ulica: e.target.value }))}
+        error={Boolean(errors.ulica)}
+        helperText={errors.ulica}
+      />
+      <TextField
+        id="standard-basic"
+        label="Kod Pocztowy"
+        variant="standard"
+        fullWidth
+        value={personalData.kodPocztowy}
+        onChange={(e) => setPersonalData((prevData) => ({ ...prevData, kodPocztowy: e.target.value }))}
+        error={Boolean(errors.kodPocztowy)}
+        helperText={errors.kodPocztowy}
+      />
+      <Autocomplete
+        multiple
+        id="services"
+        options={services}
+        getOptionLabel={(option) => option.title}
+        value={value}
+        onChange={(_, newValue) => setValue(newValue)}
+        renderInput={(params) => (
+          <TextField {...params} label="Usługi" variant="standard" fullWidth error={Boolean(errors.services)} helperText={errors.services} />
+        )}
+      />
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={plLocale}>
+        <DatePicker
+          label="Dzień"
+          firstDayOfWeek={1}
+          value={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          renderInput={(props) => <TextField {...props} value={formatDate(selectedDate, 'dd.MM.yyyy')} />}
+        />
+        <TimePicker
+          label="Godzina"
+          value={selectedDate}
+          onChange={(date) => setSelectedDate(date)}
+          renderInput={(props) => <TextField {...props} value={formatDate(selectedDate, 'HH:mm')} />}
+        />
+      </LocalizationProvider>
+      <Button
+        variant="success"
+        type="submit"
+        style={{ marginTop: '15px', marginRight: '10px' }}
+      >
+        Dodaj
+      </Button>
+      <Button
+        variant="danger"
+        onClick={handleCancel}
+        style={{ marginTop: '15px' }}
+      >
+        Anuluj
+      </Button>
     </Box>
   );
-}
+};
+
+export default Form;
