@@ -8,6 +8,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from 'react-bootstrap/Button';
 import { format } from 'date-fns';
 import plLocale from 'date-fns/locale/pl';
+import axios from 'axios';
 
 const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
   const services = [
@@ -99,13 +100,45 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
     onCloseModal();
   };
 
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    handleAddEvent();
+
+    const appointmentData = {
+      firstName: personalData.imie,
+      lastName: personalData.nazwisko,
+      email: personalData.adresMailowy,
+      phone: personalData.numerTelefonu,
+      city: personalData.miasto,
+      zipCode: personalData.kodPocztowy,
+      street: personalData.ulica,
+      houseNumber: 0,
+      apartmentNumber: 0,
+      startDate: selectedDate,
+      endDate: selectedDate,
+      services: [ 'example1', 'example2' ], 
+    }
+    
+    axios
+    .post(
+      'http://192.168.1.13:8080/api2/appointmentsv2', 
+      appointmentData,
+      {
+        "Access-Control-Allow-Origin": "*"
+      }
+    )
+    .then((response) => {
+      console.log(response.status, response.data.token);
+    })
+    .catch((err) => {
+       console.log(err.message);
+    });
+  }
+
   return (
     <Box
       component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleAddEvent();
-      }}
+      onSubmit={handleOnSubmit}
       sx={{
         background: '#',
         maxWidth: '80%',
