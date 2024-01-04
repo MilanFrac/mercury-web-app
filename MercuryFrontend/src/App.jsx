@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-  useNavigate,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import './App.css';
 import Header from './Components/AddEventForm/Header';
 import CalendarTabs from './routes/CalendarTabs';
-import ErrorPage from './routes/Errors/ErrorPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Matarnia from './routes/Matarnia';
 import CityMeble from './routes/CityMeble';
@@ -18,22 +12,24 @@ import PruszczGdański from './routes/PruszczGdański';
 import Tczew from './routes/Tczew';
 import Form from './routes/Form';
 import FullInfo from './routes/FullInfo';
-import Login from './routes/login';
+import LoginPage from './routes/Login';
 
-const AppLayout = () => {
-  const navigate = useNavigate();
+const AppLayout = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    navigate('/login');
   };
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <>
-      {isLoggedIn && <Header handleLogout={handleLogout} />}
+      <Header handleLogout={handleLogout} />
       <br />
-      <Outlet />
+      {children}
     </>
   );
 };
@@ -46,52 +42,79 @@ const App = () => {
     setAllEvents((prevEvents) => [...prevEvents, newEvent]);
   };
 
-  const router = createBrowserRouter([
-    {
-      element: <AppLayout />,
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          path: '/',
-          element: <CalendarTabs setAllEvents={setAllEvents} />,
-        },
-        {
-          path: 'matarnia',
-          element: <Matarnia />,
-        },
-        {
-          path: 'cityMeble',
-          element: <CityMeble />,
-        },
-        {
-          path: 'pruszczGdanski',
-          element: <PruszczGdański />,
-        },
-        {
-          path: 'tczew',
-          element: <Tczew />,
-        },
-        {
-          path: 'Form',
-          element: <Form />,
-        },
-        {
-          path: 'fullInfo',
-          element: <FullInfo />,
-        },
-        {
-          path: 'dashboard',
-          element: <Dashboard />,
-        },
-        {
-          path: 'login',
-          element: <Login />,
-        },
-      ],
-    },
-  ]);
-
-  return <RouterProvider router={router} />;
+  return (
+    <Router>
+      <Routes>
+        {/* Dodaj trasę dla strony logowania jako domyślną */}
+        <Route path="/" element={<Navigate to="/calendar" />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/calendar"
+          element={
+            <AppLayout>
+              <CalendarTabs setAllEvents={setAllEvents} />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/matarnia"
+          element={
+            <AppLayout>
+              <Matarnia />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/cityMeble"
+          element={
+            <AppLayout>
+              <CityMeble />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/pruszczGdanski"
+          element={
+            <AppLayout>
+              <PruszczGdański />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/tczew"
+          element={
+            <AppLayout>
+              <Tczew />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/Form"
+          element={
+            <AppLayout>
+              <Form />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/fullInfo"
+          element={
+            <AppLayout>
+              <FullInfo />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <AppLayout>
+              <Dashboard />
+            </AppLayout>
+          }
+        />
+      </Routes>
+    </Router>
+  );
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));

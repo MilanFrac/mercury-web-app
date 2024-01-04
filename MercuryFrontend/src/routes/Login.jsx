@@ -1,17 +1,30 @@
-import React from 'react';
+// LoginPage.js
+import React, { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
-import BlobAnimation from '../components/BlobAnimation';
+import BlobAnimation from '../Components/BlobAnimation';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
-  const [formData, setFormData] = React.useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleLogin = () => {
-    console.log('Dane logowania:', formData);
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (formData.username === '1' && formData.password === '1') {
+      console.log('Użytkownik zalogowany:', formData.username);
+
+      // Przekieruj użytkownika do kalendarza
+      navigate('/calendar');
+    } else {
+      // Wyświetl informację o błędnym logowaniu
+      console.log('Błędne dane logowania');
+    }
   };
 
   return (
@@ -32,20 +45,17 @@ const LoginPage = () => {
       </Typography>
       <Box
         component="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleLogin();
-        }}
+        onSubmit={handleLogin}
         sx={{
-          height: '400px',
+          height: '452px',
           maxWidth: '400px',
-          width: '200%',
+          width: '100%',
           '& .MuiTextField-root': { mb: 2 },
           backgroundColor: '#4D4949',
           padding: '50px',
           borderRadius: '10px',
-          '& .Mui-focused': { // Dodaj styl dla stanu aktywnego (focused)
-            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)', // Dostosuj kolor boxShadow
+          '& .Mui-focused': {
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
           },
         }}
         noValidate
@@ -81,7 +91,7 @@ const LoginPage = () => {
           color="primary"
           type="submit"
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, backgroundColor: '#333333' }}
         >
           Zaloguj się
         </Button>
