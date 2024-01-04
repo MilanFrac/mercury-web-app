@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -10,17 +9,10 @@ import { format } from 'date-fns';
 import plLocale from 'date-fns/locale/pl';
 import axios from 'axios';
 
-const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
-  const services = [
-    { title: 'Montaż' },
-    { title: 'Reklamacja' },
-    { title: 'Pomiar' },
-  ];
+const Form = ({ onAddEvent, onCloseModal, setAllEvents, selectedDate: initialDate }) => {
+  const [selectedDate, setSelectedDate] = useState(initialDate || new Date());
 
-  const [value, setValue] = React.useState([]);
-  const [selectedDate, setSelectedDate] = React.useState(() => new Date());
-
-  const [personalData, setPersonalData] = React.useState({
+  const [personalData, setPersonalData] = useState({
     imie: '',
     nazwisko: '',
     numerTelefonu: '+48',
@@ -30,54 +22,22 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
     kodPocztowy: 'xx-xxx',
   });
 
+  const [value, setValue] = React.useState([]);
   const [errors, setErrors] = useState({});
+
+  const services = [
+    { title: 'Montaż' },
+    { title: 'Reklamacja' },
+    { title: 'Pomiar' },
+  ];
+
+  useEffect(() => {
+    setSelectedDate(initialDate || new Date());
+  }, [initialDate]);
 
   const formatDate = (date, formatString) => format(date, formatString, { locale: plLocale });
 
   const handleAddEvent = () => {
-    // Walidacja pól
-    const newErrors = {};
-
-    if (!personalData.imie.trim()) {
-      newErrors.imie = 'Imię jest wymagane';
-    }
-
-    if (!personalData.nazwisko.trim()) {
-      newErrors.nazwisko = 'Nazwisko jest wymagane';
-    }
-
-    if (!personalData.adresMailowy.includes('@')) {
-      newErrors.adresMailowy = 'Nieprawidłowy adres email';
-    }
-
-    if (!personalData.miasto.trim() || /\d/.test(personalData.miasto)) {
-      newErrors.miasto = 'Miasto jest wymagane i nie może zawierać cyfr';
-    }
-
-    if (!/^[A-Za-z]+\s\d+$/.test(personalData.ulica)) {
-      newErrors.ulica = 'Ulica musi zawierać słowo i cyfrę (np. Nazwowa 123)';
-    }
-
-    if (!/^\d{2}-\d{3}$/.test(personalData.kodPocztowy)) {
-      newErrors.kodPocztowy = 'Nieprawidłowy format kodu pocztowego (np. 80-000)';
-    }
-
-    if (value.length === 0) {
-      newErrors.services = 'Usługa jest wymagana';
-    }
-
-    // Walidacja numeru telefonu
-    if (!/^\+48\d{0,9}$/.test(personalData.numerTelefonu)) {
-      newErrors.numerTelefonu = 'Nieprawidłowy numer telefonu';
-    }
-
-    // Jeśli są błędy, ustaw je w stanie i nie kontynuuj
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    // Reszta kodu pozostaje bez zmian
     const newEvent = {
       title: value.map((service) => service.title).join(', '),
       start: selectedDate,
@@ -85,12 +45,8 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
       ...personalData,
     };
 
-    console.log('Nowe wydarzenie:', newEvent);
-
-    // Wywołaj funkcję przekazaną jako prop do dodania nowego wydarzenia
     onAddEvent(newEvent);
 
-    // Zaktualizuj stan wszystkich wydarzeń w komponencie Form
     setAllEvents?.((prevEvents) => [...prevEvents, newEvent]);
 
     onCloseModal();
@@ -116,24 +72,24 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
       apartmentNumber: 0,
       startDate: selectedDate,
       endDate: selectedDate,
-      services: [ 'example1', 'example2' ], 
-    }
-    
+      services: value.map(service => service.title),
+    };
+
     axios
-    .post(
-      'http://192.168.1.13:8080/api2/appointmentsv2', 
-      appointmentData,
-      {
-        "Access-Control-Allow-Origin": "*"
-      }
-    )
-    .then((response) => {
-      console.log(response.status, response.data.token);
-    })
-    .catch((err) => {
-       console.log(err.message);
-    });
-  }
+      .post(
+        'http://192.168.1.13:8080/api2/appointmentsv2',
+        appointmentData,
+        {
+          "Access-Control-Allow-Origin": "*"
+        }
+      )
+      .then((response) => {
+        console.log(response.status, response.data.token);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   return (
     <Box
@@ -150,62 +106,59 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
       autoComplete="off"
     >
       <TextField
-      id="standard-basic"
-      label="Imię"
-      variant="standard"
-      fullWidth
-      value={personalData.imie}
-      onChange={(e) => {
-        const newValue = e.target.value;
-        // Sprawdź, czy wartość zawiera tylko litery
-        if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
-          setPersonalData((prevData) => ({ ...prevData, imie: newValue }));
-          setErrors((prevErrors) => ({ ...prevErrors, imie: '' }));
-        } else {
-          setErrors((prevErrors) => ({ ...prevErrors, imie: 'Imię może zawierać tylko litery' }));
-        }
-      }}
-      error={Boolean(errors.imie)}
-      helperText={errors.imie}
-    />
-  <TextField
-  id="standard-basic"
-  label="Nazwisko"
-  variant="standard"
-  fullWidth
-  value={personalData.nazwisko}
-  onChange={(e) => {
-    const newValue = e.target.value;
-    // Sprawdź, czy wartość zawiera tylko litery
-    if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
-      setPersonalData((prevData) => ({ ...prevData, nazwisko: newValue }));
-      setErrors((prevErrors) => ({ ...prevErrors, nazwisko: '' }));
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, nazwisko: 'Nazwisko może zawierać tylko litery' }));
-    }
-  }}
-  error={Boolean(errors.nazwisko)}
-  helperText={errors.nazwisko}
-/>
+        id="standard-basic"
+        label="Imię"
+        variant="standard"
+        fullWidth
+        value={personalData.imie}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
+            setPersonalData((prevData) => ({ ...prevData, imie: newValue }));
+            setErrors((prevErrors) => ({ ...prevErrors, imie: '' }));
+          } else {
+            setErrors((prevErrors) => ({ ...prevErrors, imie: 'Imię może zawierać tylko litery' }));
+          }
+        }}
+        error={Boolean(errors.imie)}
+        helperText={errors.imie}
+      />
       <TextField
-  id="standard-basic"
-  label="Numer Telefonu"
-  variant="standard"
-  fullWidth
-  value={personalData.numerTelefonu}
-  onChange={(e) => {
-    // Sprawdź, czy wartość zaczyna się od "+48" i ma maksymalnie 12 znaków
-    const newValue = e.target.value;
-    if (newValue.startsWith('+48') && newValue.length <= 12) {
-      setPersonalData((prevData) => ({ ...prevData, numerTelefonu: newValue }));
-      setErrors((prevErrors) => ({ ...prevErrors, numerTelefonu: '' }));
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, numerTelefonu: 'Nieprawidłowy numer telefonu' }));
-    }
-  }}
-  error={Boolean(errors.numerTelefonu)}
-  helperText={errors.numerTelefonu}
-/>
+        id="standard-basic"
+        label="Nazwisko"
+        variant="standard"
+        fullWidth
+        value={personalData.nazwisko}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
+            setPersonalData((prevData) => ({ ...prevData, nazwisko: newValue }));
+            setErrors((prevErrors) => ({ ...prevErrors, nazwisko: '' }));
+          } else {
+            setErrors((prevErrors) => ({ ...prevErrors, nazwisko: 'Nazwisko może zawierać tylko litery' }));
+          }
+        }}
+        error={Boolean(errors.nazwisko)}
+        helperText={errors.nazwisko}
+      />
+      <TextField
+        id="standard-basic"
+        label="Numer Telefonu"
+        variant="standard"
+        fullWidth
+        value={personalData.numerTelefonu}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          if (newValue.startsWith('+48') && newValue.length <= 12) {
+            setPersonalData((prevData) => ({ ...prevData, numerTelefonu: newValue }));
+            setErrors((prevErrors) => ({ ...prevErrors, numerTelefonu: '' }));
+          } else {
+            setErrors((prevErrors) => ({ ...prevErrors, numerTelefonu: 'Nieprawidłowy numer telefonu' }));
+          }
+        }}
+        error={Boolean(errors.numerTelefonu)}
+        helperText={errors.numerTelefonu}
+      />
       <TextField
         id="standard-basic"
         label="Adres Mailowy"
@@ -224,7 +177,6 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents }) => {
         value={personalData.miasto}
         onChange={(e) => {
           const newValue = e.target.value;
-          // Sprawdź, czy wartość zawiera tylko litery
           if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
             setPersonalData((prevData) => ({ ...prevData, miasto: newValue }));
             setErrors((prevErrors) => ({ ...prevErrors, miasto: '' }));

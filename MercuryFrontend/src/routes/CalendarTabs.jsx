@@ -1,3 +1,4 @@
+// CalendarComponent.jsx
 import React, { Component } from "react";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -6,7 +7,7 @@ import "dayjs/locale/pl";
 import dayjs from "dayjs";
 import EventModal from "../Components/CalendarComponents/EventModal";
 import Form from "./Form";
-import { Modal } from 'react-bootstrap';  // Importuj Modal z react-bootstrap
+import { Modal } from 'react-bootstrap';
 
 dayjs.locale("pl");
 
@@ -14,19 +15,18 @@ const localizer = dayjsLocalizer(dayjs);
 
 class CalendarComponent extends Component {
   state = {
-    allEvents: [],
     selectedEvent: null,
     isModalOpen: false,
+    selectedDate: null,
     isResponsive: false,
+  };
+
+  handleEventClick = (event) => {
+    this.setState({ selectedEvent: event });
   };
 
   handleNoopClick = (slot) => {
     this.setState({ isModalOpen: true, selectedDate: slot.start });
-  };
-  
-
-  handleEventClick = (event) => {
-    this.setState({ selectedEvent: event });
   };
 
   handleResize = () => {
@@ -57,17 +57,15 @@ class CalendarComponent extends Component {
   };
 
   handleAddEventOutside = (newEvent) => {
-    // Implementacja dodawania nowego wydarzenia
     console.log("Nowe wydarzenie:", newEvent);
   };
 
   handleConfirm = () => {
-    // Implementacja potwierdzenia
     this.closeModal();
   };
 
   render() {
-    const { selectedEvent, isModalOpen, isResponsive } = this.state;
+    const { selectedEvent, isModalOpen, isResponsive, selectedDate } = this.state;
 
     const dayFormat = isResponsive ? "ddd" : "dddd";
 
@@ -82,7 +80,7 @@ class CalendarComponent extends Component {
       >
         <Calendar
           localizer={localizer}
-          events={[]}
+          events={[]} // Uwaga: tutaj powinny być przekazane wydarzenia, jeśli są dostępne
           startAccessor="start"
           endAccessor="end"
           style={{ height: 700, margin: "50px", width: "100%" }}
@@ -113,22 +111,21 @@ class CalendarComponent extends Component {
             closeModal={this.closeModal}
           />
         )}
-{isModalOpen && (
-  <Modal show={isModalOpen} onHide={this.handleModalClose} dialogClassName={{ maxWidth: '70vw' }}>
-    <Modal.Header closeButton>
-      <Modal.Title>Utwórz zdarzenie</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <Form
-        onAddEvent={this.handleAddEventOutside}
-        onCloseModal={this.handleModalClose}
-        onConfirm={this.handleConfirm}
-        selectedDate={this.state.selectedDate} // Przekazanie wybranej daty do Form
-      />
-    </Modal.Body>
-  </Modal>
-)}
-
+        {isModalOpen && (
+          <Modal show={isModalOpen} onHide={this.handleModalClose} dialogClassName={{ maxWidth: '70vw' }}>
+            <Modal.Header closeButton>
+              <Modal.Title>Utwórz zdarzenie</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form
+                onAddEvent={this.handleAddEventOutside}
+                onCloseModal={this.handleModalClose}
+                onConfirm={this.handleConfirm}
+                selectedDate={selectedDate}
+              />
+            </Modal.Body>
+          </Modal>
+        )}
       </div>
     );
   }
