@@ -18,7 +18,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @CrossOrigin(
-        origins = { "http://localhost:5173", "http://localhost:8080" },
+        origins = { 
+            "http://localhost:3000", 
+            "http://localhost:8080", 
+            "http://mercury_frontend:3000", 
+            "http://mercury_backend:8080",
+            "http://192.168.1.13:3000", 
+            "http://192.168.1.13:8080",
+        },
         methods = {
                 RequestMethod.GET,
                 RequestMethod.PUT,
