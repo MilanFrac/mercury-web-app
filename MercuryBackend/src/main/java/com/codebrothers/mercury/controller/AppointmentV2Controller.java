@@ -23,8 +23,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
             "http://localhost:8080", 
             "http://mercury_frontend:3000", 
             "http://mercury_backend:8080",
-            "http://192.168.1.13:3000", 
-            "http://192.168.1.13:8080",
+            "http://169.254.62.204:3000", 
+            "http://169.254.62.204:8080",
         },
         methods = {
                 RequestMethod.GET,

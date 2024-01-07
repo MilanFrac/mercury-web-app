@@ -1,4 +1,3 @@
-// CalendarComponent.jsx
 import React, { Component } from "react";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";

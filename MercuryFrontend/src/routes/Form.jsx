@@ -77,7 +77,7 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents, selectedDate: initialDat
 
     axios
       .post(
-        'http://192.168.1.13:8080/api2/appointmentsv2',
+        'http://169.254.62.204:8080/api2/appointmentsv2',
         appointmentData,
         {
           "Access-Control-Allow-Origin": "*"
@@ -217,6 +217,14 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents, selectedDate: initialDat
         renderInput={(params) => (
           <TextField {...params} label="Usługi" variant="standard" fullWidth error={Boolean(errors.services)} helperText={errors.services} />
         )}
+      />
+       <TextField
+          id="standard-multiline-flexible"
+          label="Opis"
+          
+          multiline
+          maxRows={4}
+          variant="standard"
       />
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={plLocale}>
         <DatePicker
