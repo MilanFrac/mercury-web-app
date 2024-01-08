@@ -77,7 +77,7 @@ const Form = ({ onAddEvent, onCloseModal, setAllEvents, selectedDate: initialDat
 
     axios
       .post(
-        'http://169.254.62.204:8080/api2/appointmentsv2',
+        process.env.REACT_APP_BACKEND_API_BASE_URL + '/api2/appointmentsv2',
         appointmentData,
         {
           "Access-Control-Allow-Origin": "*"
