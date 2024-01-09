@@ -1,15 +1,22 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react';
+import { VitePluginVue } from '@vitejs/plugin-vue';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
+export default {
+  plugins: [
+    react(),
+    VitePluginVue({
+      include: [/\.vue$/, /\.md$/], // Dodaj wszystkie niezbędne rozszerzenia plików Vue
+    }),
+  ],
   server: {
     host: true,
-    port: 3000, // Port used by docker container
+    port: 3000,
     strictPort: true,
-     watch: {
-       usePolling: true
-     }
-  }
-})
+    watch: {
+      usePolling: true,
+    },
+  },
+  optimizeDeps: {
+    include: ['@mui/lab'],
+  },
+};

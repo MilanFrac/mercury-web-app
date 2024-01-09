@@ -45,7 +45,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Dodaj trasę dla strony logowania jako domyślną */}
         <Route path="/" element={<Navigate to="/calendar" />} />
         <Route path="/login" element={<LoginPage />} />
         <Route
@@ -116,7 +115,5 @@ const App = () => {
     </Router>
   );
 };
-
-ReactDOM.render(<App />, document.getElementById('root'));
 
 export default App;
