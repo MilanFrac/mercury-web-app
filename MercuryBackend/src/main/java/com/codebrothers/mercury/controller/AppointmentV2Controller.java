@@ -5,6 +5,7 @@ import com.codebrothers.mercury.domain.AppointmentV2;
 import com.codebrothers.mercury.exception.AppointmentV2NotFoundException;
 import com.codebrothers.mercury.repository.IAppointmentV2Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -17,21 +18,6 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@CrossOrigin(
-        origins = { 
-            "http://localhost:3000", 
-            "http://localhost:8080", 
-            "http://mercury_frontend:3000", 
-            "http://mercury_backend:8080",
-            "http://169.254.62.204:3000", 
-            "http://169.254.62.204:8080",
-        },
-        methods = {
-                RequestMethod.GET,
-                RequestMethod.PUT,
-                RequestMethod.DELETE,
-                RequestMethod.POST
-        })
 @RestController
 @RequestMapping("/api2")
 public class AppointmentV2Controller {
