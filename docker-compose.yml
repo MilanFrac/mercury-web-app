@@ -30,6 +30,8 @@ services:
         spring.datasource.username: ${MYSQLDB_USER}
         spring.datasource.password: ${MYSQLDB_ROOT_PASSWORD}
         spring.jpa.hibernate.ddl-auto: "update"
+        web.cors.origin.backend.api.url: ${REACT_APP_BACKEND_API_BASE_URL}
+        web.cors.origin.frontend.url: ${REACT_APP_FRONTEND_BASE_URL}
     volumes:
       - .m2:/root:/.m2
     stdin_open: true
@@ -38,6 +40,7 @@ services:
   frontend:
     container_name: mercury_frontend
     build: ./MercuryFrontend
+    env_file: ./.env
     volumes:
       - ./MercuryFrontend/src:/app/src
     ports:
@@ -45,6 +48,7 @@ services:
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BACKEND_API_BASE_URL=${REACT_APP_BACKEND_API_BASE_URL}
     command: npm run dev
 
 volumes:
