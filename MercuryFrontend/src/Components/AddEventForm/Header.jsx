@@ -58,14 +58,14 @@ function Header() {
                 Panel Pracownika
               </Nav.Link>
 
-              <Button eventKey="Form" title="Utwórz" onClick={handleModalShow}>
+              <Button eventkey="Form" title="Utwórz" onClick={handleModalShow}>
                 Utwórz
               </Button>
             </Nav>
 
             <TextField id="outlined-search" label="Szukaj" type="search" size="small" />
 
-            <Button eventKey="Login" title="Wyloguj" as={Link} to="/login">
+            <Button eventkey="Login" title="Wyloguj" as={Link} to="/login">
               Wyloguj
             </Button>
           </Navbar.Collapse>

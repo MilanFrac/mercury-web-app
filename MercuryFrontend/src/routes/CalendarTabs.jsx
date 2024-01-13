@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { Calendar, dayjsLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-datepicker/dist/react-datepicker.css";
-import "dayjs/locale/pl";
-import dayjs from "dayjs";
-import EventModal from "../Components/CalendarComponents/EventModal";
-import Form from "./Form";
-import { Modal } from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Calendar, dayjsLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'dayjs/locale/pl';
+import dayjs from 'dayjs';
+import EventModal from '../Components/CalendarComponents/EventModal';
+import Form from './Form';
+import { Modal, Navbar } from 'react-bootstrap';
 
-dayjs.locale("pl");
+dayjs.locale('pl');
 
 const localizer = dayjsLocalizer(dayjs);
+
 
 class CalendarComponent extends Component {
   state = {
@@ -39,12 +40,12 @@ class CalendarComponent extends Component {
   };
 
   componentDidMount() {
-    window.addEventListener("resize", this.handleResize);
+    window.addEventListener('resize', this.handleResize);
     this.handleResize();
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   closeModal = () => {
@@ -56,7 +57,7 @@ class CalendarComponent extends Component {
   };
 
   handleAddEventOutside = (newEvent) => {
-    console.log("Nowe wydarzenie:", newEvent);
+    console.log('New event:', newEvent);
   };
 
   handleConfirm = () => {
@@ -66,23 +67,17 @@ class CalendarComponent extends Component {
   render() {
     const { selectedEvent, isModalOpen, isResponsive, selectedDate } = this.state;
 
-    const dayFormat = isResponsive ? "ddd" : "dddd";
+    const dayFormat = isResponsive ? 'ddd' : 'dddd';
 
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "80vh",
-        }}
-      >
+      <div>
+ 
         <Calendar
           localizer={localizer}
-          events={[]} // Uwaga: tutaj powinny być przekazane wydarzenia, jeśli są dostępne
+          events={[]} 
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 700, margin: "50px", width: "100%" }}
+          style={{ height: 700, margin: '50px', width: '100%' }}
           onSelectEvent={this.handleEventClick}
           onDoubleClickEvent={this.handleDoubleClickEvent}
           onSelectSlot={this.handleNoopClick}
@@ -96,24 +91,20 @@ class CalendarComponent extends Component {
             dayFormat: dayFormat,
           }}
           messages={{
-            month: "Miesiąc",
-            week: "Tydzień",
-            day: "Dzień",
-            previous: "<",
-            today: "Dziś",
-            next: ">",
+            month: 'Month',
+            week: 'Week',
+            day: 'Day',
+            previous: '<',
+            today: 'Today',
+            next: '>',
           }}
         />
-        {selectedEvent && (
-          <EventModal
-            event={selectedEvent}
-            closeModal={this.closeModal}
-          />
-        )}
+
+        {selectedEvent && <EventModal event={selectedEvent} closeModal={this.closeModal} />}
         {isModalOpen && (
           <Modal show={isModalOpen} onHide={this.handleModalClose} dialogClassName={{ maxWidth: '70vw' }}>
             <Modal.Header closeButton>
-              <Modal.Title>Utwórz zdarzenie</Modal.Title>
+              <Modal.Title>Create Event</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form

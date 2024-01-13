@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import './App.css';
-import Header from './Components/AddEventForm/Header';
+import Header from './Components/Header';
 import CalendarTabs from './routes/CalendarTabs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Matarnia from './routes/Matarnia';
@@ -45,7 +45,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Dodaj trasę dla strony logowania jako domyślną */}
         <Route path="/" element={<Navigate to="/calendar" />} />
         <Route path="/login" element={<LoginPage />} />
         <Route
@@ -116,7 +115,5 @@ const App = () => {
     </Router>
   );
 };
-
-ReactDOM.render(<App />, document.getElementById('root'));
 
 export default App;
