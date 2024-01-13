@@ -57,7 +57,7 @@ class CalendarComponent extends Component {
   };
 
   handleAddEventOutside = (newEvent) => {
-    console.log('Nowe wydarzenie:', newEvent);
+    console.log('New event:', newEvent);
   };
 
   handleConfirm = () => {
