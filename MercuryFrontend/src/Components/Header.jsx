@@ -8,7 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import TextField from '@mui/material/TextField';
 import Modal from 'react-bootstrap/Modal';
 import Form from '../routes/Form';
-import NavGroup from '../routes/groups/navGroup';
+import NavGroup from '../routes/groups/NavGroup';
 import navItems from '../routes/locations/navItems';
 
 function Header() {
