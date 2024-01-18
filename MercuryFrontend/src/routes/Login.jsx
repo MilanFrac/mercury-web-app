@@ -1,10 +1,10 @@
 // LoginPage.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import BlobAnimation from '../Components/BlobAnimation';
 import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
+export default function LoginPage() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const navigate = useNavigate();
 
@@ -17,13 +17,13 @@ const LoginPage = () => {
     e.preventDefault();
 
     if (formData.username === '1' && formData.password === '1') {
-      console.log('Użytkownik zalogowany:', formData.username);
+      console.log('Logged user:', formData.username);
 
-      // Przekieruj użytkownika do kalendarza
+      // Redirect user to /calendar
       navigate('/calendar');
     } else {
-      // Wyświetl informację o błędnym logowaniu
-      console.log('Błędne dane logowania');
+      // Show information about invalid sign in
+      console.log('Incorrect login or password!');
     }
   };
 
@@ -35,13 +35,12 @@ const LoginPage = () => {
         alignItems: 'center',
         justifyContent: 'center',
         height: '80vh',
-        position: 'relative',
-      }}
-    >
+        position: 'relative'
+      }}>
       <BlobAnimation />
 
       <Typography variant="h4" gutterBottom>
-        Logowanie
+        Logging
       </Typography>
       <Box
         component="form"
@@ -56,15 +55,14 @@ const LoginPage = () => {
           borderRadius: '10px',
           '& .Mui-focused': {
             boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-          },
+          }
         }}
         noValidate
-        autoComplete="off"
-      >
+        autoComplete="off">
         <TextField
           sx={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '20px',
+            borderRadius: '20px'
           }}
           name="username"
           label="Nazwa użytkownika"
@@ -76,7 +74,7 @@ const LoginPage = () => {
         <TextField
           sx={{
             backgroundColor: '#FFFFFF',
-            borderRadius: '20px',
+            borderRadius: '20px'
           }}
           name="password"
           label="Hasło"
@@ -91,13 +89,10 @@ const LoginPage = () => {
           color="primary"
           type="submit"
           fullWidth
-          sx={{ mt: 2, backgroundColor: '#333333' }}
-        >
-          Zaloguj się
+          sx={{ mt: 2, backgroundColor: '#333333' }}>
+          Log in
         </Button>
       </Box>
     </Box>
   );
-};
-
-export default LoginPage;
+}
