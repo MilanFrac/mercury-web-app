@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
@@ -7,9 +7,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import TextField from '@mui/material/TextField';
 import Modal from 'react-bootstrap/Modal';
-import Form from '../routes/Form';
 import NavGroup from '../routes/groups/NavGroup';
-import navItems from '../routes/locations/navItems';
+import navItems from '../data/locations/navItems';
+import AppointmentForm from '../routes/AppointmentForm';
 
 function Header() {
   const [showModal, setShowModal] = useState(false);
@@ -26,7 +26,7 @@ function Header() {
     console.log('Event confirmed', newEvent);
   };
 
-  const dropdownItems = navItems ? Object.values(navItems) : [];
+  // const dropdownItems = navItems ? Object.values(navItems) : [];
 
   return (
     <>
@@ -38,11 +38,12 @@ function Header() {
           <Navbar.Toggle aria-controls="navbar" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
+              <NavGroup title="Locations" items={navItems}></NavGroup>
 
-              <NavGroup title="Locations" items={navItems}>
-              </NavGroup>
-
-              <Nav.Link as={NavLink} to="/dashboard" style={{ marginRight: '10px', marginLeft: '10px' }}>
+              <Nav.Link
+                as={NavLink}
+                to="/dashboard"
+                style={{ marginRight: '10px', marginLeft: '10px' }}>
                 Dashboard
               </Nav.Link>
 
@@ -65,7 +66,11 @@ function Header() {
           <Modal.Title>Create Event</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onAddEvent={handleAddEventOutside} onCloseModal={handleModalClose} onConfirm={handleConfirm} />
+          <AppointmentForm
+            onAddEvent={handleAddEventOutside}
+            onCloseModal={handleModalClose}
+            onConfirm={handleConfirm}
+          />
         </Modal.Body>
       </Modal>
     </>

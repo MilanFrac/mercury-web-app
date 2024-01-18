@@ -3,16 +3,16 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import './App.css';
 import Header from './Components/Header';
-import CalendarTabs from './routes/CalendarTabs';
+import AppointmentScheduler from './routes/AppointmentScheduler';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Matarnia from './routes/Matarnia';
 import CityMeble from './routes/CityMeble';
 import Dashboard from './routes/Dashboard';
 import PruszczGdański from './routes/PruszczGdański';
 import Tczew from './routes/Tczew';
-import Form from './routes/Form';
 import FullInfo from './routes/FullInfo';
 import LoginPage from './routes/Login';
+import AppointmentForm from './routes/AppointmentForm';
 
 const AppLayout = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -38,7 +38,7 @@ const App = () => {
   const [allEvents, setAllEvents] = useState([]);
 
   const handleAddEvent = (newEvent) => {
-    console.log('Nowe wydarzenie odebrane z formularza:', newEvent);
+    console.log('New event received from a form:', newEvent);
     setAllEvents((prevEvents) => [...prevEvents, newEvent]);
   };
 
@@ -51,7 +51,7 @@ const App = () => {
           path="/calendar"
           element={
             <AppLayout>
-              <CalendarTabs setAllEvents={setAllEvents} />
+              <AppointmentScheduler setAllEvents={setAllEvents} />
             </AppLayout>
           }
         />
@@ -88,10 +88,10 @@ const App = () => {
           }
         />
         <Route
-          path="/Form"
+          path="/AppointmentForm"
           element={
             <AppLayout>
-              <Form />
+              <AppointmentForm />
             </AppLayout>
           }
         />
