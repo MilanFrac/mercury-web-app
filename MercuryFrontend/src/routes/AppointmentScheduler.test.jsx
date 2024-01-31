@@ -1,33 +1,32 @@
-import React from 'react';
 import renderer from 'react-test-renderer';
-import { Calendar, dayjsLocalizer } from 'react-big-calendar';
-import dayjs from 'dayjs';
-import AppointmentScheduler from './AppointmentScheduler';
+// import { Calendar, dayjsLocalizer } from 'react-big-calendar';
+// import dayjs from 'dayjs';
+// import AppointmentScheduler from './AppointmentScheduler';
 import { CustomEvent } from './AppointmentScheduler';
 
 describe('AppointmentScheduler Snapshot testing suite', () => {
-//   let windowSpy;
+  //   let windowSpy;
 
-//   beforeEach(() => {
-//     windowSpy = jest.spyOn(window, 'window', 'get');
-//   });
+  //   beforeEach(() => {
+  //     windowSpy = jest.spyOn(window, 'window', 'get');
+  //   });
 
-//   afterEach(() => {
-//     windowSpy.mockRestore();
-//   });
+  //   afterEach(() => {
+  //     windowSpy.mockRestore();
+  //   });
 
-//   it('Matches DOM Snapshot', () => {
-//     const localizer = dayjsLocalizer(dayjs);
+  //   it('Matches DOM Snapshot', () => {
+  //     const localizer = dayjsLocalizer(dayjs);
 
-//     // windowSpy.mockImplementation(() => ({
-//     //   location: {
-//     //     origin: 'https://example.com'
-//     //   }
-//     // }));
+  //     // windowSpy.mockImplementation(() => ({
+  //     //   location: {
+  //     //     origin: 'https://example.com'
+  //     //   }
+  //     // }));
 
-//     const domTree = renderer.create(<AppointmentScheduler {...localizer} />).toJSON();
-//     expect(domTree).toMatchSnapshot();
-//   });
+  //     const domTree = renderer.create(<AppointmentScheduler {...localizer} />).toJSON();
+  //     expect(domTree).toMatchSnapshot();
+  //   });
 
   it('CustomEvent Snapshot', () => {
     const event = {
