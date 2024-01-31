@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppointmentScheduler Snapshot testing suite CustomEvent Snapshot 1`] = `
+[
+  <span>
+    <strong>
+      Majonez
+    </strong>
+  </span>,
+  <br />,
+  <span>
+    Niesamowity majonez umówiony na wizytę we wtorek na Kasprzaka 10/22 w Warszawie. Montaż
+  </span>,
+]
+`;

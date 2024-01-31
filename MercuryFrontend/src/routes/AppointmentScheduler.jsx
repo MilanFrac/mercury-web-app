@@ -14,24 +14,19 @@ import axios from 'axios';
 
 // const localizer = dayjsLocalizer(dayjs);
 
-function CustomEvent(event) {
-  // console.log(event);
+export function CustomEvent(event) {
   return (
     <>
       <span>
         <strong>{event.title}</strong>
       </span>
       <br />
-      <span>{event.event.description}</span>
+      <span>{event.description}</span>
     </>
   );
 }
 
-export default function AppointmentScheduler({
-  dayjsLocale = dayjs.locale('pl'),
-  localizer = dayjsLocalizer(dayjs),
-  setAllEvents
-}) {
+export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs) }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
@@ -128,13 +123,13 @@ export default function AppointmentScheduler({
   ];
 
   return (
-    <div>
+    <>
       <Calendar
         components={{
           event: CustomEvent
         }}
         localizer={localizer}
-        events={events}
+        events={sampleEvents}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 700, margin: '50px', width: '100%' }}
@@ -184,23 +179,10 @@ export default function AppointmentScheduler({
           </Modal.Body>
         </Modal>
       )}
-    </div>
+    </>
   );
 }
 
 AppointmentScheduler.propTypes = {
-  dayjsLocale: PropTypes.string,
-  localizer: PropTypes.object,
-  setAllEvents: PropTypes.func
+  localizer: PropTypes.object
 };
-
-// class CalendarComponent extends Component {
-//   componentDidMount() {
-//     window.addEventListener('resize', this.handleResize);
-//     this.handleResize();
-//   }
-
-//   componentWillUnmount() {
-//     window.removeEventListener('resize', this.handleResize);
-//   }
-// }
