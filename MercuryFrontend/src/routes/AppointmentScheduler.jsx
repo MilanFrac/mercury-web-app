@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useContext } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -9,10 +9,8 @@ import { Modal } from 'react-bootstrap';
 import AppointmentForm from './AppointmentForm';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-
-// dayjs.locale('pl');
-
-// const localizer = dayjsLocalizer(dayjs);
+import i18n from '../data/i18n';
+import { LanguageContext } from '../data/LanguageContext';
 
 export function CustomEvent(event) {
   return (
@@ -33,6 +31,12 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   const [selectedDate, setSelectedDate] = useState(null);
   const [isResponsive, setIsResponsive] = useState(false);
   const [events, setEvents] = useState([]);
+
+  const language = useContext(LanguageContext);
+
+  dayjs.locale(language);
+
+  // const localizer = dayjsLocalizer(dayjs);
 
   const getAppointments = async () => {
     await axios
@@ -146,11 +150,11 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
           dayFormat: dayFormat
         }}
         messages={{
-          month: 'Month',
-          week: 'Week',
-          day: 'Day',
+          month: i18n.t('Month'),
+          week: i18n.t('Week'),
+          day: i18n.t('Day'),
           previous: '<',
-          today: 'Today',
+          today: i18n.t('Today'),
           next: '>'
         }}
       />

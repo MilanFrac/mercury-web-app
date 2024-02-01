@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import './App.css';
 import Header from './Components/Header';
@@ -13,6 +12,7 @@ import Tczew from './routes/Tczew';
 import FullInfo from './routes/FullInfo';
 import LoginPage from './routes/Login';
 import AppointmentForm from './routes/AppointmentForm';
+import { LanguageContext } from './data/LanguageContext';
 
 const AppLayout = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -36,6 +36,7 @@ const AppLayout = ({ children }) => {
 
 const App = () => {
   const [allEvents, setAllEvents] = useState([]);
+  const language = useContext(LanguageContext);
 
   const handleAddEvent = (newEvent) => {
     console.log('New event received from a form:', newEvent);
@@ -43,6 +44,7 @@ const App = () => {
   };
 
   return (
+    <LanguageContext.Provider value={language}>
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/calendar" />} />
@@ -112,7 +114,8 @@ const App = () => {
           }
         />
       </Routes>
-    </Router>
+    </Router>   
+    </LanguageContext.Provider>
   );
 };
 
