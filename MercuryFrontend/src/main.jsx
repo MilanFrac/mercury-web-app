@@ -7,6 +7,6 @@ const rootInstance = createRoot(root);
 
 rootInstance.render(
   <React.StrictMode>
-      <App />
+    <App />
   </React.StrictMode>
 );

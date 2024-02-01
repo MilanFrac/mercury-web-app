@@ -1,4 +1,3 @@
-import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const moveBlob = keyframes`
@@ -59,17 +58,15 @@ const WhiteBlob = styled.div`
   position: absolute;
   width: 200px;
   height: 200px;
-  background-color: #AAAAAA; /* Kolor bloba w odcieniach szarości */
+  background-color: #aaaaaa; /* Kolor bloba w odcieniach szarości */
   animation: ${moveWhiteBlob} 10s infinite; /* Zwiększony czas trwania animacji */
 `;
 
-const BlobAnimation = () => {
+export default function BlobAnimation() {
   return (
     <>
       <Blob />
       <WhiteBlob />
     </>
   );
-};
-
-export default BlobAnimation;
+}
