@@ -7,7 +7,7 @@ export default defineConfig({
     'process.env.REACT_APP_BACKEND_API_BASE_URL': `"${process.env.REACT_APP_BACKEND_API_BASE_URL}"`
   },
   plugins: [react()],
-  base: '/mercury-web-app/',
+  base: '/',
   server: {
     host: true,
     port: 3000, // Port used by docker container
