@@ -43,7 +43,7 @@ const App = () => {
   };
 
   return (
-    <Router>
+    <Router basename={process.env.REACT_APP_PUBLIC_URL}>
       <Routes>
         <Route exact path="/" element={<Navigate to="/calendar" />} />
         <Route exact path="/login" element={<LoginPage />} />
