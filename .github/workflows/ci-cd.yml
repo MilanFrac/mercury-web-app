@@ -17,7 +17,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: Build Project
-        run: npm build
+        run: npm run build
       - name: Upload artifact to enable deployment
         uses: actions/upload-artifact@v3
         with:
