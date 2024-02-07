@@ -9,3 +9,8 @@ To deploy locally:
 To undeploy locally:
 
 ..\vite> docker-compose down
+
+# Demo
+- [Web client](https://milanfrac.github.io/mercury-web-app/)
+- Backend REST API: TO_BE_DEPLOYED_ON_REQUEST
+- DB: TO_BE_DEPLOYED_ON_REQUEST
