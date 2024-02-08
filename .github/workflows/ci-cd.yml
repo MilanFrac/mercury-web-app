@@ -1,5 +1,7 @@
 name: Mercury-Frontend CI/CD
-on: push
+on: 
+  pull_request:
+    types: [opened, reopened]
 defaults:
       run:
         working-directory: ./MercuryFrontend
