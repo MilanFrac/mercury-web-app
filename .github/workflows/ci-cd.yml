@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: production-files
-          path: ./MercuryFrontend/dist/
+          path: ./dist/
  # Deploy Job
   deploy:
     # Add a dependency to the build job
@@ -38,9 +38,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: production-files
-          path: ./MercuryFrontend/dist/
+          path: ./dist/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.MERCURY_WEBAPP }}
-          publish_dir: ./MercuryFrontend/dist/
+          publish_dir: ./dist/
