@@ -2,6 +2,8 @@ name: Mercury-Frontend CI/CD
 on: 
   pull_request:
     types: [opened, reopened]
+  workflow_dispatch:
+    
 defaults:
       run:
         working-directory: ./MercuryFrontend
