@@ -1,6 +1,7 @@
 {
   "name": "MercuryFrontend-",
   "private": true,
+  "homepage": "https://milanfranc.github.io/mercury-web-app/",
   "jest": {
     "verbose": true,
     "testEnvironment": "jsdom",
@@ -15,7 +16,7 @@
       "window": {}
     }
   },
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",

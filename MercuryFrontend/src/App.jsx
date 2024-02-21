@@ -45,11 +45,12 @@ const App = () => {
 
   return (
     <LanguageContext.Provider value={language}>
-    <Router>
+    <Router basename={process.env.REACT_APP_PUBLIC_URL}>
       <Routes>
-        <Route path="/" element={<Navigate to="/calendar" />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route exact path="/" element={<Navigate to="/calendar" />} />
+        <Route exact path="/login" element={<LoginPage />} />
         <Route
+          exact
           path="/calendar"
           element={
             <AppLayout>
@@ -58,6 +59,7 @@ const App = () => {
           }
         />
         <Route
+          exact
           path="/matarnia"
           element={
             <AppLayout>
@@ -66,6 +68,7 @@ const App = () => {
           }
         />
         <Route
+          exact
           path="/cityMeble"
           element={
             <AppLayout>
@@ -74,6 +77,7 @@ const App = () => {
           }
         />
         <Route
+          exact
           path="/pruszczGdanski"
           element={
             <AppLayout>
@@ -82,6 +86,7 @@ const App = () => {
           }
         />
         <Route
+          exact
           path="/tczew"
           element={
             <AppLayout>
@@ -90,6 +95,7 @@ const App = () => {
           }
         />
         <Route
+          exact
           path="/AppointmentForm"
           element={
             <AppLayout>
@@ -98,6 +104,7 @@ const App = () => {
           }
         />
         <Route
+          exact
           path="/fullInfo"
           element={
             <AppLayout>
@@ -106,6 +113,7 @@ const App = () => {
           }
         />
         <Route
+          exact
           path="/dashboard"
           element={
             <AppLayout>
