@@ -8,29 +8,29 @@ const LanguageTabContent = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const euLanguages = [
-    { code: 'en', name: t('english') },
-    { code: 'pl', name: t('polski') },
-    { code: 'de', name: t('Deutsch') },
-    { code: 'fr', name: t('français') },
-    { code: 'es', name: t('español') },
-    { code: 'it', name: t('italiano') },
-    { code: 'nl', name: t('Nederlands') },
-    { code: 'pt', name: t('português') },
-    { code: 'sv', name: t('svenska') },
-    { code: 'da', name: t('dansk') },
-    { code: 'fi', name: t('suomi') },
-    { code: 'el', name: t('ελληνικά (elliniká)') },
-    { code: 'bg', name: t('български') },
-    { code: 'hr', name: t('hrvatski') },
-    { code: 'cs', name: t('čeština') },
-    { code: 'hu', name: t('magyar') },
-    { code: 'ga', name: t('Gaeilge') },
-    { code: 'lv', name: t('latviešu') },
-    { code: 'lt', name: t('lietuvių') },
-    { code: 'mt', name: t('Malti') },
-    { code: 'ro', name: t('română') },
-    { code: 'sk', name: t('slovenčina') },
-    { code: 'sl', name: t('slovenščina') },
+    { code: 'en', name: 'english' },
+    { code: 'pl', name: 'polski' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'fr', name: 'français' },
+    { code: 'es', name: 'español' },
+    { code: 'it', name: 'italiano' },
+    { code: 'nl', name: 'Nederlands' },
+    { code: 'pt', name: 'português' },
+    { code: 'sv', name: 'svenska' },
+    { code: 'da', name: 'dansk' },
+    { code: 'fi', name: 'suomi' },
+    { code: 'el', name: 'ελληνικά (elliniká)' },
+    { code: 'bg', name: 'български' },
+    { code: 'hr', name: 'hrvatski' },
+    { code: 'cs', name: 'čeština' },
+    { code: 'hu', name: 'magyar' },
+    { code: 'ga', name: 'Gaeilge' },
+    { code: 'lv', name: 'latviešu' },
+    { code: 'lt', name: 'lietuvių' },
+    { code: 'mt', name: 'Malti' },
+    { code: 'ro', name: 'română' },
+    { code: 'sk', name: 'slovenčina' },
+    { code: 'sl', name: 'slovenščina' },
   ];
 
   const chunkArray = (array, size) => {
@@ -48,8 +48,8 @@ const LanguageTabContent = () => {
 
   const filteredLanguages = euLanguages.filter(
     (language) =>
-      language.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      language.code.toLowerCase().includes(searchTerm.toLowerCase())
+      t(language.name.toLowerCase()).includes(searchTerm.toLowerCase()) ||
+      t(language.code.toLowerCase()).includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -72,13 +72,14 @@ const LanguageTabContent = () => {
             style={{
               textAlign: 'center',
               marginBottom: '10px',
+              aspectRatio: '1 / 1',
               width: 'calc(25% - 10px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            {language.name}
+            {t(language.name)}
           </Button>
         ))}
       </div>

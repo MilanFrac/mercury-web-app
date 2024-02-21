@@ -1,4 +1,3 @@
-// LoginPage.js
 import { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import BlobAnimation from '../Components/BlobAnimation';
@@ -19,10 +18,9 @@ export default function LoginPage() {
     if (formData.username === '1' && formData.password === '1') {
       console.log('Logged user:', formData.username);
 
-      // Redirect user to /calendar
       navigate('/calendar');
     } else {
-      // Show information about invalid sign in
+      
       console.log('Incorrect login or password!');
     }
   };
@@ -50,19 +48,20 @@ export default function LoginPage() {
           maxWidth: '400px',
           width: '100%',
           '& .MuiTextField-root': { mb: 2 },
-          backgroundColor: '#4D4949',
+          backgroundColor: 'white', 
           padding: '50px',
-          borderRadius: '10px',
-          '& .Mui-focused': {
-            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-          }
+          borderRadius: '20px', 
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.25)', 
         }}
         noValidate
         autoComplete="off">
         <TextField
           sx={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '20px'
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'black',
+              },
+            },
           }}
           name="username"
           label="Nazwa użytkownika"
@@ -73,13 +72,16 @@ export default function LoginPage() {
         />
         <TextField
           sx={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '20px'
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'black', 
+              },
+            },
           }}
           name="password"
           label="Hasło"
           type="password"
-          variant="outlined"
+          variant='outlined'
           fullWidth
           value={formData.password}
           onChange={handleInputChange}
