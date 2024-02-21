@@ -9,13 +9,18 @@ import plLocale from 'date-fns/locale/pl';
 import axios from 'axios';
 import services from '../data/services';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 export default function AppointmentForm({
   onAddEvent,
   onCloseModal,
   setAllEvents,
   selectedDate: initialDate
+  
 }) {
+  const { t } = useTranslation();
+  
+
   const [selectedDate, setSelectedDate] = useState(initialDate || new Date());
   const [personalData, setPersonalData] = useState({
     imie: '',
@@ -69,7 +74,6 @@ export default function AppointmentForm({
     };
 
     axios
-      // eslint-disable-next-line no-undef
       .post(process.env.REACT_APP_BACKEND_API_BASE_URL + '/api2/appointmentsv2', appointmentData, {
         'Access-Control-Allow-Origin': '*'
       })
@@ -96,7 +100,7 @@ export default function AppointmentForm({
       autoComplete="off">
       <TextField
         id="firstnameField"
-        label="First name"
+        label={t('firstName')}
         variant="standard"
         fullWidth
         value={personalData.imie}
@@ -106,7 +110,7 @@ export default function AppointmentForm({
             setPersonalData((prevData) => ({ ...prevData, imie: newValue }));
             setErrors((prevErrors) => ({ ...prevErrors, imie: '' }));
           } else {
-            setErrors((prevErrors) => ({ ...prevErrors, imie: 'Imię może zawierać tylko litery' }));
+            setErrors((prevErrors) => ({ ...prevErrors, imie: t('Name can contain only letters') }));
           }
         }}
         error={Boolean(errors.imie)}
@@ -114,7 +118,7 @@ export default function AppointmentForm({
       />
       <TextField
         id="lastnameField"
-        label="Last name"
+        label={t('lastName')}
         variant="standard"
         fullWidth
         value={personalData.nazwisko}
@@ -126,7 +130,7 @@ export default function AppointmentForm({
           } else {
             setErrors((prevErrors) => ({
               ...prevErrors,
-              nazwisko: 'Nazwisko może zawierać tylko litery'
+              nazwisko: t('Last name can contain only letters')
             }));
           }
         }}
@@ -135,7 +139,7 @@ export default function AppointmentForm({
       />
       <TextField
         id="phoneNumberField"
-        label="Phone number"
+        label={t('phoneNumber')}
         variant="standard"
         fullWidth
         value={personalData.numerTelefonu}
@@ -147,7 +151,7 @@ export default function AppointmentForm({
           } else {
             setErrors((prevErrors) => ({
               ...prevErrors,
-              numerTelefonu: 'Invalid phone number'
+              numerTelefonu: t('Invalid phone number')
             }));
           }
         }}
@@ -156,7 +160,7 @@ export default function AppointmentForm({
       />
       <TextField
         id="emailField"
-        label="Email"
+        label={t('email')}
         variant="standard"
         fullWidth
         value={personalData.adresMailowy}
@@ -168,7 +172,7 @@ export default function AppointmentForm({
       />
       <TextField
         id="cityField"
-        label="City"
+        label={t('city')}
         variant="standard"
         fullWidth
         value={personalData.miasto}
@@ -180,7 +184,7 @@ export default function AppointmentForm({
           } else {
             setErrors((prevErrors) => ({
               ...prevErrors,
-              miasto: 'City name can contain only letters'
+              miasto: t('City name can contain only letters')
             }));
           }
         }}
@@ -189,7 +193,7 @@ export default function AppointmentForm({
       />
       <TextField
         id="streetField"
-        label="Street"
+        label={t('street')}
         variant="standard"
         fullWidth
         value={personalData.ulica}
@@ -199,7 +203,7 @@ export default function AppointmentForm({
       />
       <TextField
         id="postCodeField"
-        label="Post code"
+        label={t('postalCode')}
         variant="standard"
         fullWidth
         value={personalData.kodPocztowy}
@@ -220,7 +224,7 @@ export default function AppointmentForm({
           <TextField
             id="servicesField"
             {...params}
-            label="Services"
+            label={t('services')}
             variant="standard"
             fullWidth
             error={Boolean(errors.services)}
@@ -230,7 +234,7 @@ export default function AppointmentForm({
       />
       <TextField
         id="descriptionField"
-        label="Description"
+        label={t('description')}
         multiline={true}
         maxRows={4}
         variant="outlined"
@@ -241,7 +245,7 @@ export default function AppointmentForm({
         adapterLocale={plLocale}>
         <DatePicker
           id="datePicker"
-          label="Day"
+          label={t('day')}
           firstDayOfWeek={1}
           value={selectedDate}
           onChange={(date) => setSelectedDate(date)}
@@ -249,7 +253,7 @@ export default function AppointmentForm({
         />
         <TimePicker
           id="timePicker"
-          label="Time"
+          label={t('hour')}
           value={selectedDate}
           onChange={(date) => setSelectedDate(date)}
           format="HH:mm"
@@ -260,14 +264,17 @@ export default function AppointmentForm({
         variant="success"
         type="submit"
         style={{ marginTop: '15px', marginRight: '10px' }}>
-        Add
+        {t('Add')}
       </Button>
       <Button
         id="cancelButton"
         variant="danger"
-        onClick={onCloseModal}
+        onClick={() => { 
+          onCloseModal();
+
+        }}
         style={{ marginTop: '15px' }}>
-        Cancel
+        {t('cancel')}
       </Button>
     </Box>
   );

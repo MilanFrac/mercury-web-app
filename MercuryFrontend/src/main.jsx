@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import App from './App';
 import { createRoot } from 'react-dom/client';
 
@@ -7,6 +7,6 @@ const rootInstance = createRoot(root);
 
 rootInstance.render(
   <React.StrictMode>
-    <App />
+      <App />
   </React.StrictMode>
 );
