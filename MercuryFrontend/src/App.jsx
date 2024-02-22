@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Header from './Components/Header';
 import AppointmentScheduler from './routes/AppointmentScheduler';
@@ -45,84 +45,84 @@ const App = () => {
 
   return (
     <LanguageContext.Provider value={language}>
-    <Router basename={process.env.REACT_APP_PUBLIC_URL}>
-      <Routes>
-        <Route exact path="/" element={<Navigate to="/calendar" />} />
-        <Route exact path="/login" element={<LoginPage />} />
-        <Route
-          exact
-          path="/calendar"
-          element={
-            <AppLayout>
-              <AppointmentScheduler setAllEvents={setAllEvents} />
-            </AppLayout>
-          }
-        />
-        <Route
-          exact
-          path="/matarnia"
-          element={
-            <AppLayout>
-              <Matarnia />
-            </AppLayout>
-          }
-        />
-        <Route
-          exact
-          path="/cityMeble"
-          element={
-            <AppLayout>
-              <CityMeble />
-            </AppLayout>
-          }
-        />
-        <Route
-          exact
-          path="/pruszczGdanski"
-          element={
-            <AppLayout>
-              <PruszczGdański />
-            </AppLayout>
-          }
-        />
-        <Route
-          exact
-          path="/tczew"
-          element={
-            <AppLayout>
-              <Tczew />
-            </AppLayout>
-          }
-        />
-        <Route
-          exact
-          path="/AppointmentForm"
-          element={
-            <AppLayout>
-              <AppointmentForm />
-            </AppLayout>
-          }
-        />
-        <Route
-          exact
-          path="/fullInfo"
-          element={
-            <AppLayout>
-              <FullInfo />
-            </AppLayout>
-          }
-        />
-        <Route
-          exact
-          path="/dashboard"
-          element={
-            <AppLayout>
-              <Dashboard />
-            </AppLayout>
-          }
-        />
-      </Routes>
-    </Router>   
+      <Router basename={process.env.REACT_APP_PUBLIC_URL}>
+        <Routes>
+          <Route exact path="/" element={<Navigate to="/calendar" />} />
+          <Route exact path="/login" element={<LoginPage />} />
+          <Route
+            exact
+            path="/calendar"
+            element={
+              <AppLayout>
+                <AppointmentScheduler setAllEvents={setAllEvents} />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/matarnia"
+            element={
+              <AppLayout>
+                <Matarnia />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/cityMeble"
+            element={
+              <AppLayout>
+                <CityMeble />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/pruszczGdanski"
+            element={
+              <AppLayout>
+                <PruszczGdański />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/tczew"
+            element={
+              <AppLayout>
+                <Tczew />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/AppointmentForm"
+            element={
+              <AppLayout>
+                <AppointmentForm />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/fullInfo"
+            element={
+              <AppLayout>
+                <FullInfo />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/dashboard"
+            element={
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            }
+          />
+        </Routes>
+      </Router>
     </LanguageContext.Provider>
   );
 };

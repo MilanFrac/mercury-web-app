@@ -4,6 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import LanguageTabContent from '../data/LangaugeTabContent';
 import i18n from '../data/i18n';
+import PersonalizationTabContent from './PersonalizationTabContent';
 
 function Settings({ showModal, handleModalClose }) {
   const [activeTab, setActiveTab] = React.useState(0);
@@ -24,7 +25,7 @@ function Settings({ showModal, handleModalClose }) {
       <Modal.Body>
         {activeTab === 0 && <LanguageTabContent />}
         {activeTab === 1 && <PersonalizationTabContent />}
-        {activeTab === 2 && <AccountTabContent />}
+        {/* {activeTab === 2 && <AccountTabContent />} */}
       </Modal.Body>
     </Modal>
   );

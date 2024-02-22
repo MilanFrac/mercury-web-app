@@ -20,7 +20,6 @@ export default function LoginPage() {
 
       navigate('/calendar');
     } else {
-      
       console.log('Incorrect login or password!');
     }
   };
@@ -48,10 +47,10 @@ export default function LoginPage() {
           maxWidth: '400px',
           width: '100%',
           '& .MuiTextField-root': { mb: 2 },
-          backgroundColor: 'white', 
+          backgroundColor: 'white',
           padding: '50px',
-          borderRadius: '20px', 
-          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.25)', 
+          borderRadius: '20px',
+          boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.25)'
         }}
         noValidate
         autoComplete="off">
@@ -59,9 +58,9 @@ export default function LoginPage() {
           sx={{
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: 'black',
-              },
-            },
+                borderColor: 'black'
+              }
+            }
           }}
           name="username"
           label="Nazwa użytkownika"
@@ -74,14 +73,14 @@ export default function LoginPage() {
           sx={{
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: 'black', 
-              },
-            },
+                borderColor: 'black'
+              }
+            }
           }}
           name="password"
           label="Hasło"
           type="password"
-          variant='outlined'
+          variant="outlined"
           fullWidth
           value={formData.password}
           onChange={handleInputChange}

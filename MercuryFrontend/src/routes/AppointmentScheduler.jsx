@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import i18n from '../data/i18n';
 import { LanguageContext } from '../data/LanguageContext';
-import EventModal from '../Components/CalendarComponents/EventModal';
+// import EventModal from '../Components/CalendarComponents/EventModal';
 import AppointmentForm from './AppointmentForm';
 
 dayjs.locale(i18n);
@@ -37,7 +37,7 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   const [events, setEvents] = useState([]);
   const language = useContext(LanguageContext);
 
-dayjs.locale(i18n.language);
+  dayjs.locale(i18n.language);
 
   const getAppointments = async () => {
     await axios

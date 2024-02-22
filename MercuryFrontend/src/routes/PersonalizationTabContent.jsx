@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PersonalizationTabContent = () => {
+function PersonalizationTabContent() {
   const { t } = useTranslation();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -19,15 +19,10 @@ const PersonalizationTabContent = () => {
       <h3>{t('customization')}</h3>
       <div>
         <label htmlFor="darkModeToggle">{t('darkMode')}</label>
-        <input
-          type="checkbox"
-          id="darkModeToggle"
-          checked={darkMode}
-          onChange={toggleDarkMode}
-        />
+        <input type="checkbox" id="darkModeToggle" checked={darkMode} onChange={toggleDarkMode} />
       </div>
     </div>
   );
-};
+}
 
 export default PersonalizationTabContent;
