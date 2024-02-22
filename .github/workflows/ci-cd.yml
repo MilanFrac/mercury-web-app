@@ -27,7 +27,7 @@ jobs:
         with:
           name: production-files
           # ATTENTION: actions/upload-artifact does not use working-directory !!!
-          path: .//MercuryFrontenddist
+          path: ./MercuryFrontend/dist
  # Deploy Job
   deploy:
     # Add a dependency to the build job
