@@ -46,4 +46,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.MERCURY_WEBAPP }}
-          publish_dir: ./MercuryFrontend/dist
+          #publish_dir: ./dist
