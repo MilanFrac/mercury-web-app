@@ -4,15 +4,12 @@ import './App.css';
 import Header from './Components/Header';
 import AppointmentScheduler from './routes/AppointmentScheduler';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Matarnia from './routes/Matarnia';
-import CityMeble from './routes/CityMeble';
 import Dashboard from './routes/Dashboard';
-import PruszczGdański from './routes/PruszczGdański';
-import Tczew from './routes/Tczew';
 import FullInfo from './routes/FullInfo';
 import LoginPage from './routes/Login';
 import AppointmentForm from './routes/AppointmentForm';
 import { LanguageContext } from './data/LanguageContext';
+import Location from './Components/Location';
 
 const AppLayout = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -63,7 +60,7 @@ const App = () => {
             path="/matarnia"
             element={
               <AppLayout>
-                <Matarnia />
+                <Location locationName="Matarnia" />
               </AppLayout>
             }
           />
@@ -72,7 +69,7 @@ const App = () => {
             path="/cityMeble"
             element={
               <AppLayout>
-                <CityMeble />
+                <Location locationName="City Meble" />
               </AppLayout>
             }
           />
@@ -81,7 +78,7 @@ const App = () => {
             path="/pruszczGdanski"
             element={
               <AppLayout>
-                <PruszczGdański />
+                <Location locationName="Pruszcz Gdański" />
               </AppLayout>
             }
           />
@@ -90,7 +87,7 @@ const App = () => {
             path="/tczew"
             element={
               <AppLayout>
-                <Tczew />
+                <Location locationName="Tczew" />
               </AppLayout>
             }
           />
