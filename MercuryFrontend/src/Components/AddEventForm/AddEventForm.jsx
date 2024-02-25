@@ -8,6 +8,7 @@ import TimeAndServiceSection from './TimeAndServiceSection';
 import dayjs from 'dayjs';
 import { useImmer } from 'use-immer';
 
+// ATTENTION: @Deprecated
 export default function AddEventForm({ availableServices }) {
   const [appointment, updateAppointment] = useImmer({
     customer: {
