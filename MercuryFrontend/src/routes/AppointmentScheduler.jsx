@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import i18n from '../data/i18n';
 import { LanguageContext } from '../data/LanguageContext';
-// import EventModal from '../Components/CalendarComponents/EventModal';
 import AppointmentForm from './AppointmentForm';
 
 dayjs.locale(i18n);
@@ -87,10 +86,6 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
 
   const handleModalClose = () => {
     setIsModalOpen(false);
-  };
-
-  const handleEventModalClose = () => {
-    setIsEventModalOpen(false);
   };
 
   const handleAddEventOutside = (newEvent) => {

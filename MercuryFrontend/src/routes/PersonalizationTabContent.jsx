@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-function PersonalizationTabContent() {
+export default function PersonalizationTabContent() {
   const { t } = useTranslation();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -10,6 +10,8 @@ function PersonalizationTabContent() {
 
     // Dodaj kod do zmiany klasy na cały korzeń aplikacji lub odpowiednich komponentów
     // Przykład użycia klasy na całej stronie:
+    // Add source code for changing a class at app's root or suitable components
+    // An example of use case for using the class on the entire webpage
     const rootElement = document.documentElement;
     rootElement.classList.toggle('dark-mode', darkMode);
   };
@@ -24,5 +26,3 @@ function PersonalizationTabContent() {
     </div>
   );
 }
-
-export default PersonalizationTabContent;
