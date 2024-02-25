@@ -16,10 +16,8 @@ export default function AppointmentForm({
   onCloseModal,
   setAllEvents,
   selectedDate: initialDate
-  
 }) {
   const { t } = useTranslation();
-  
 
   const [selectedDate, setSelectedDate] = useState(initialDate || new Date());
   const [personalData, setPersonalData] = useState({
@@ -110,7 +108,10 @@ export default function AppointmentForm({
             setPersonalData((prevData) => ({ ...prevData, imie: newValue }));
             setErrors((prevErrors) => ({ ...prevErrors, imie: '' }));
           } else {
-            setErrors((prevErrors) => ({ ...prevErrors, imie: t('Name can contain only letters') }));
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              imie: t('Name can contain only letters')
+            }));
           }
         }}
         error={Boolean(errors.imie)}
@@ -269,9 +270,8 @@ export default function AppointmentForm({
       <Button
         id="cancelButton"
         variant="danger"
-        onClick={() => { 
+        onClick={() => {
           onCloseModal();
-
         }}
         style={{ marginTop: '15px' }}>
         {t('cancel')}

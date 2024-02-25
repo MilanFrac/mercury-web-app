@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PersonalizationTabContent = () => {
+export default function PersonalizationTabContent() {
   const { t } = useTranslation();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -10,6 +10,8 @@ const PersonalizationTabContent = () => {
 
     // Dodaj kod do zmiany klasy na cały korzeń aplikacji lub odpowiednich komponentów
     // Przykład użycia klasy na całej stronie:
+    // Add source code for changing a class at app's root or suitable components
+    // An example of use case for using the class on the entire webpage
     const rootElement = document.documentElement;
     rootElement.classList.toggle('dark-mode', darkMode);
   };
@@ -19,15 +21,8 @@ const PersonalizationTabContent = () => {
       <h3>{t('customization')}</h3>
       <div>
         <label htmlFor="darkModeToggle">{t('darkMode')}</label>
-        <input
-          type="checkbox"
-          id="darkModeToggle"
-          checked={darkMode}
-          onChange={toggleDarkMode}
-        />
+        <input type="checkbox" id="darkModeToggle" checked={darkMode} onChange={toggleDarkMode} />
       </div>
     </div>
   );
-};
-
-export default PersonalizationTabContent;
+}

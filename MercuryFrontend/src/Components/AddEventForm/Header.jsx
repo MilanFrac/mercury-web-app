@@ -54,7 +54,10 @@ function Header() {
                 </NavDropdown.Item>
               </NavDropdown>
 
-              <Nav.Link as={NavLink} to="/dashboard" style={{ marginRight: '10px', marginLeft: '10px' }}>
+              <Nav.Link
+                as={NavLink}
+                to="/dashboard"
+                style={{ marginRight: '10px', marginLeft: '10px' }}>
                 Panel Pracownika
               </Nav.Link>
 
@@ -77,7 +80,11 @@ function Header() {
           <Modal.Title>Utwórz zdarzenie</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onAddEvent={handleAddEventOutside} onCloseModal={handleModalClose} onConfirm={handleConfirm} />
+          <Form
+            onAddEvent={handleAddEventOutside}
+            onCloseModal={handleModalClose}
+            onConfirm={handleConfirm}
+          />
         </Modal.Body>
       </Modal>
     </>

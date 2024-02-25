@@ -4,8 +4,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import LanguageTabContent from '../data/LangaugeTabContent';
 import i18n from '../data/i18n';
+import PersonalizationTabContent from './PersonalizationTabContent';
+import AccountTabContent from './AccountTabContent';
+import PropTypes from 'prop-types';
 
-function Settings({ showModal, handleModalClose }) {
+export default function Settings({ showModal, handleModalClose }) {
   const [activeTab, setActiveTab] = React.useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -30,4 +33,7 @@ function Settings({ showModal, handleModalClose }) {
   );
 }
 
-export default Settings;
+Settings.propTypes = {
+  showModal: PropTypes.bool,
+  handleModalClose: PropTypes.func
+};

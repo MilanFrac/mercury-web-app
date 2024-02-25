@@ -1,4 +1,3 @@
-import React, { createContext } from 'react';
-import i18n from './i18n';
+import { createContext } from 'react';
 
 export let LanguageContext = createContext('pl');

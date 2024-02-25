@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { TextField } from '@mui/material';
@@ -30,7 +30,7 @@ const LanguageTabContent = () => {
     { code: 'mt', name: 'Malti' },
     { code: 'ro', name: 'română' },
     { code: 'sk', name: 'slovenčina' },
-    { code: 'sl', name: 'slovenščina' },
+    { code: 'sl', name: 'slovenščina' }
   ];
 
   const chunkArray = (array, size) => {
@@ -76,9 +76,8 @@ const LanguageTabContent = () => {
               width: 'calc(25% - 10px)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+              justifyContent: 'center'
+            }}>
             {t(language.name)}
           </Button>
         ))}

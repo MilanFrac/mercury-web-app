@@ -23,21 +23,21 @@ const data = [
   { icon: <People />, label: 'Authentication' },
   { icon: <Dns />, label: 'Database' },
   { icon: <PermMedia />, label: 'Storage' },
-  { icon: <Public />, label: 'Hosting' },
+  { icon: <Public />, label: 'Hosting' }
 ];
 
 const FireNav = styled(List)({
   '& .MuiListItemButton-root': {
     paddingLeft: 24,
-    paddingRight: 24,
+    paddingRight: 24
   },
   '& .MuiListItemIcon-root': {
     minWidth: 0,
-    marginRight: 16,
+    marginRight: 16
   },
   '& .MuiSvgIcon-root': {
-    fontSize: 20,
-  },
+    fontSize: 20
+  }
 });
 
 export default function CustomizedList() {
@@ -49,17 +49,16 @@ export default function CustomizedList() {
           components: {
             MuiListItemButton: {
               defaultProps: {
-                disableTouchRipple: true,
-              },
-            },
+                disableTouchRipple: true
+              }
+            }
           },
           palette: {
             mode: 'dark',
             primary: { main: 'rgb(102, 157, 246)' },
-            background: { paper: 'rgb(5, 30, 52)' },
-          },
-        })}
-      >
+            background: { paper: 'rgb(5, 30, 52)' }
+          }
+        })}>
         <Paper elevation={0} sx={{ maxWidth: 256 }}>
           <FireNav component="nav" disablePadding>
             <ListItemButton component="a" href="#customized-list">
@@ -70,7 +69,7 @@ export default function CustomizedList() {
                 primaryTypographyProps={{
                   fontSize: 20,
                   fontWeight: 'medium',
-                  letterSpacing: 0,
+                  letterSpacing: 0
                 }}
               />
             </ListItemButton>
@@ -85,7 +84,7 @@ export default function CustomizedList() {
                   primaryTypographyProps={{
                     color: 'primary',
                     fontWeight: 'medium',
-                    variant: 'body2',
+                    variant: 'body2'
                   }}
                 />
               </ListItemButton>
@@ -96,17 +95,17 @@ export default function CustomizedList() {
                     '& svg': {
                       color: 'rgba(255,255,255,0.8)',
                       transition: '0.2s',
-                      transform: 'translateX(0) rotate(0)',
+                      transform: 'translateX(0) rotate(0)'
                     },
                     '&:hover, &:focus': {
                       bgcolor: 'unset',
                       '& svg:first-of-type': {
-                        transform: 'translateX(-4px) rotate(-20deg)',
+                        transform: 'translateX(-4px) rotate(-20deg)'
                       },
                       '& svg:last-of-type': {
                         right: 0,
-                        opacity: 1,
-                      },
+                        opacity: 1
+                      }
                     },
                     '&::after': {
                       content: '""',
@@ -115,10 +114,9 @@ export default function CustomizedList() {
                       display: 'block',
                       left: 0,
                       width: '1px',
-                      bgcolor: 'divider',
-                    },
-                  }}
-                >
+                      bgcolor: 'divider'
+                    }
+                  }}>
                   <Settings />
                   <ArrowRight sx={{ position: 'absolute', right: 4, opacity: 0 }} />
                 </IconButton>
@@ -128,9 +126,8 @@ export default function CustomizedList() {
             <Box
               sx={{
                 bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
-                pb: open ? 2 : 0,
-              }}
-            >
+                pb: open ? 2 : 0
+              }}>
               <ListItemButton
                 alignItems="flex-start"
                 onClick={() => setOpen(!open)}
@@ -138,23 +135,22 @@ export default function CustomizedList() {
                   px: 3,
                   pt: 2.5,
                   pb: open ? 0 : 2.5,
-                  '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
-                }}
-              >
+                  '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } }
+                }}>
                 <ListItemText
                   primary="Build"
                   primaryTypographyProps={{
                     fontSize: 15,
                     fontWeight: 'medium',
                     lineHeight: '20px',
-                    mb: '2px',
+                    mb: '2px'
                   }}
                   secondary="Authentication, Firestore Database, Realtime Database, Storage, Hosting, Functions, and Machine Learning"
                   secondaryTypographyProps={{
                     noWrap: true,
                     fontSize: 12,
                     lineHeight: '16px',
-                    color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
+                    color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)'
                   }}
                   sx={{ my: 0 }}
                 />
@@ -163,7 +159,7 @@ export default function CustomizedList() {
                     mr: -1,
                     opacity: 0,
                     transform: open ? 'rotate(-180deg)' : 'rotate(0)',
-                    transition: '0.2s',
+                    transition: '0.2s'
                   }}
                 />
               </ListItemButton>
@@ -171,11 +167,8 @@ export default function CustomizedList() {
                 data.map((item) => (
                   <ListItemButton
                     key={item.label}
-                    sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}
-                  >
-                    <ListItemIcon sx={{ color: 'inherit' }}>
-                      {item.icon}
-                    </ListItemIcon>
+                    sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}>
+                    <ListItemIcon sx={{ color: 'inherit' }}>{item.icon}</ListItemIcon>
                     <ListItemText
                       primary={item.label}
                       primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }}
@@ -188,4 +181,4 @@ export default function CustomizedList() {
       </ThemeProvider>
     </Box>
   );
-} 
+}
