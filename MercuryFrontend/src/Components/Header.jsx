@@ -104,7 +104,11 @@ function Header() {
             <Modal.Title>{i18n.t('create')} Event</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <AppointmentForm handleAddEventOutside={handleAddEventOutside} />
+            <AppointmentForm
+              onAddEvent={handleAddEventOutside}
+              onCloseModal={handleCreateModalClose}
+              handleAddEventOutside={handleAddEventOutside}
+            />
           </Modal.Body>
         </Modal>
       </main>
