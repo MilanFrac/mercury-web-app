@@ -4,7 +4,6 @@ import com.codebrothers.mercury.DTO.AppointmentFromFormDTO;
 import com.codebrothers.mercury.component.AppointmentMapper;
 import com.codebrothers.mercury.component.AppointmentModelAssembler;
 import com.codebrothers.mercury.domain.*;
-import com.codebrothers.mercury.exception.AppointmentNotFoundException;
 import com.codebrothers.mercury.repository.IAppointmentRepository;
 import com.codebrothers.mercury.service.*;
 import org.slf4j.Logger;
@@ -64,8 +63,7 @@ public class AppointmentController {
     @GetMapping
     public CollectionModel<EntityModel<Appointment>> getAll() {
 
-        // TODO: replace it with appriopriate service method
-        List<EntityModel<Appointment>> appointments = appointmentRepository.findAll().stream()
+        List<EntityModel<Appointment>> appointments = appointmentService.findAllAppointments().stream()
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
 
@@ -81,10 +79,7 @@ public class AppointmentController {
     @GetMapping("/{id}")
     public EntityModel<Appointment> getOne(@PathVariable Long id) {
 
-        // TODO: replace it with appriopriate service method
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow( () -> new AppointmentNotFoundException(id));
-
+        Appointment appointment = appointmentService.findAppointmentById(id);
         return assembler.toModel(appointment);
     }
 
@@ -143,8 +138,6 @@ public class AppointmentController {
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
-
-    // Makes related Event to be deleted as well.
 
     /**
      * DELETE method for removing Appointment from the database.

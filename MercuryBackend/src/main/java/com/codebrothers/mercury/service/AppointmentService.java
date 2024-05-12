@@ -6,6 +6,8 @@ import com.codebrothers.mercury.repository.IAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Service class for managing Appointment objects.
  */
@@ -66,5 +68,14 @@ public class AppointmentService {
         Long eventId = findAppointmentById(appointmentId).getEvent().getId();
         appointmentRepository.deleteById(appointmentId);
         eventService.deleteEvent(eventId);
+    }
+
+    /**
+     * Retrieve all Appointments from the database.
+     *
+     * @return List<Appointment>
+     */
+    public List<Appointment> findAllAppointments() {
+        return appointmentRepository.findAll();
     }
 }
