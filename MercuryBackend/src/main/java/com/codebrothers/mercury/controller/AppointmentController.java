@@ -35,6 +35,14 @@ public class AppointmentController {
     private final AppointmentMapper appointmentMapper;
     private final AppointmentService appointmentService;
 
+    /**
+     * AppointmentController constructor.
+     *
+     * @param appointmentRepository IAppointmentRepository
+     * @param assembler AppointmentModelAssembler
+     * @param appointmentMapper AppointmentMapper
+     * @param appointmentService AppointmentService
+     */
     @Autowired
     AppointmentController(
             IAppointmentRepository appointmentRepository,
@@ -48,9 +56,15 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
+    /**
+     * GET method for retrieving all Appointments from the database.
+     *
+     * @return CollectionModel<EntityModel<Appointment>>
+     */
     @GetMapping
     public CollectionModel<EntityModel<Appointment>> getAll() {
 
+        // TODO: replace it with appriopriate service method
         List<EntityModel<Appointment>> appointments = appointmentRepository.findAll().stream()
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
@@ -58,15 +72,28 @@ public class AppointmentController {
         return CollectionModel.of(appointments, linkTo(methodOn(AppointmentController.class).getAll()).withSelfRel());
     }
 
+    /**
+     * GET method for retrieving one specific Appointment from the database.
+     *
+     * @param id Long
+     * @return EntityModel<Appointment>
+     */
     @GetMapping("/{id}")
     public EntityModel<Appointment> getOne(@PathVariable Long id) {
 
+        // TODO: replace it with appriopriate service method
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow( () -> new AppointmentNotFoundException(id));
 
         return assembler.toModel(appointment);
     }
 
+    /**
+     * POST method for creating a new Appointment from submitted form.
+     *
+     * @param appointmentFromFormDTO AppointmentFromFormDTO
+     * @return ResponseEntity<?>
+     */
     @PostMapping
     public ResponseEntity<?> addAppointment(@RequestBody AppointmentFromFormDTO appointmentFromFormDTO) {
 
@@ -117,10 +144,19 @@ public class AppointmentController {
                 .body(entityModel);
     }
 
+    // Makes related Event to be deleted as well.
+
+    /**
+     * DELETE method for removing Appointment from the database.
+     * Makes related Event to be deleted as well.
+     *
+     * @param id Long
+     * @return ResponseEntity<?>
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
 
-        appointmentRepository.deleteById(id);
+        appointmentService.deleteAppointment(id);
         return ResponseEntity.noContent().build();
     }
 

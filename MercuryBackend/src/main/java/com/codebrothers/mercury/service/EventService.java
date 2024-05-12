@@ -53,4 +53,13 @@ public class EventService {
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
+
+    /**
+     * Remove specific Event by their id.
+     *
+     * @param eventId Long
+     */
+    public void deleteEvent(Long eventId) {
+        eventRepository.deleteById(eventId);
+    }
 }

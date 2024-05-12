@@ -1,6 +1,7 @@
 package com.codebrothers.mercury.service;
 
 import com.codebrothers.mercury.domain.Appointment;
+import com.codebrothers.mercury.exception.AppointmentNotFoundException;
 import com.codebrothers.mercury.repository.IAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class AppointmentService {
 
     private final IAppointmentRepository appointmentRepository;
+    private final EventService eventService;
 
     /**
      * AppointmentService constructor.
@@ -19,8 +21,19 @@ public class AppointmentService {
      * @param appointmentRepository IAppointmentRepository
      */
     @Autowired
-    public AppointmentService(IAppointmentRepository appointmentRepository) {
+    public AppointmentService(IAppointmentRepository appointmentRepository, EventService eventService) {
         this.appointmentRepository = appointmentRepository;
+        this.eventService = eventService;
+    }
+
+    /**
+     * Find Appointment with the specific id.
+     *
+     * @param appointmentId Long
+     * @return Appointment
+     */
+    public Appointment findAppointmentById(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId).orElseThrow(() -> new AppointmentNotFoundException(appointmentId));
     }
 
     /**
@@ -41,5 +54,17 @@ public class AppointmentService {
      */
     public Appointment updateAppointment(Appointment appointment) {
         return appointmentRepository.save(appointment);
+    }
+
+    /**
+     * Remove Appointment with given id from the database.
+     * Remove related Event as well.
+     *
+     * @param appointmentId Long
+     */
+    public void deleteAppointment(Long appointmentId) {
+        Long eventId = findAppointmentById(appointmentId).getEvent().getId();
+        appointmentRepository.deleteById(appointmentId);
+        eventService.deleteEvent(eventId);
     }
 }
