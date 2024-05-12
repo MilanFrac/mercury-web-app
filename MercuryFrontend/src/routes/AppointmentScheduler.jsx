@@ -11,6 +11,7 @@ import axios from 'axios';
 import i18n from '../data/i18n';
 import { LanguageContext } from '../data/LanguageContext';
 import AppointmentForm from './AppointmentForm';
+import parseDescription from '../handlers/longDescriptionHandler';
 
 dayjs.locale(i18n);
 
@@ -40,15 +41,15 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
 
   const getAppointments = async () => {
     await axios
-      .get(process.env.REACT_APP_BACKEND_API_BASE_URL + '/api2/appointmentsv2')
+      .get(process.env.REACT_APP_BACKEND_API_BASE_URL + '/api/v1/appointments')
       .then((response) => {
         const appointments = response.data._embedded.appointmentV2List.map((appointment) => {
           return {
             ...appointment,
             allDay: false,
             title: `${appointment.services}#${appointment.id}`,
-            start: appointment.startDate,
-            end: appointment.endDate
+            start: appointment.event.realizationDate,
+            end: appointment.event.realizationDate
           };
         });
         setEvents(appointments);
@@ -105,17 +106,21 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   const sampleEvents = [
     {
       allDay: false,
-      title: t('yourBrand'),
-      description: t('description'),
-      start: new Date(2024, 0, 17, 10, 30),
-      end: new Date(2024, 0, 17, 12, 30)
+      title: t('Instal-230'),
+      description: parseDescription(
+        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;Żaluzje 800K;2023-07-29;Opis przykładowy;'
+      ),
+      realizationDate: new Date(2024, 3, 27, 10, 30),
+      end: new Date(2024, 3, 17, 12, 30)
     },
     {
-      allDay: true,
-      title: t('createEvent'),
-      description: t('newEvent'),
-      start: new Date(2024, 0, 18, 12, 30),
-      end: new Date(2024, 0, 19, 12, 30)
+      allDay: false,
+      title: t('Combo-231'),
+      description: parseDescription(
+        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;Żaluzje 800K;2023-07-29;Opis przykładowy;'
+      ),
+      realizationDate: new Date(2024, 3, 28, 12, 30),
+      end: new Date(2024, 3, 18, 12, 30)
     }
   ];
 
@@ -127,8 +132,9 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
         }}
         localizer={localizer}
         events={sampleEvents}
-        startAccessor="start"
-        endAccessor="end"
+        startAccessor="realizationDate"
+        endAccessor="realizationDate"
+        tooltipAccessor="description"
         style={{ height: 700, margin: '50px', width: '100%' }}
         onSelectEvent={handleEventClick}
         onSelectSlot={handleNoopClick}
