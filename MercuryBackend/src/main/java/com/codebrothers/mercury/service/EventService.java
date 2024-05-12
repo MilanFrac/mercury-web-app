@@ -1,6 +1,7 @@
 package com.codebrothers.mercury.service;
 
 import com.codebrothers.mercury.domain.Event;
+import com.codebrothers.mercury.exception.EventNotFoundException;
 import com.codebrothers.mercury.repository.IEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +42,8 @@ public class EventService {
      * @param eventId Long
      * @return Optional<Event>
      */
-    public Optional<Event> getEvent(Long eventId) {
-        return eventRepository.findById(eventId);
+    public Event findEventById(Long eventId) {
+        return eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException(eventId));
     }
 
     /**
@@ -50,7 +51,7 @@ public class EventService {
      *
      * @return List<Event>
      */
-    public List<Event> getAllEvents() {
+    public List<Event> findAllEvents() {
         return eventRepository.findAll();
     }
 
