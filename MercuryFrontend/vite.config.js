@@ -18,6 +18,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['@mui/lab']
+    esbuildOptions: { define: { global: 'globalThis' } },
+    //include: ['@mui/lab']
   }
 });

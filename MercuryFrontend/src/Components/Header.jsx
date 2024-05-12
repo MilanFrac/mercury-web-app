@@ -14,13 +14,13 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import SettingsIcon from '@mui/icons-material/Settings';
-import Settings from '../routes/settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Avatar from '@mui/material/Avatar';
+import Settings from '../routes/Settings';
 import AppointmentForm from '../routes/AppointmentForm';
 
-function Header() {
+export default function Header() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -131,5 +131,3 @@ function Header() {
     </>
   );
 }
-
-export default Header;
