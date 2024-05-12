@@ -21,11 +21,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api")
 public class AdvisorController {
 
-    @Autowired
+
     private final IAdvisorRepository advisorRepository;
 
     private final AdvisorModelAssembler assembler;
 
+    @Autowired
     AdvisorController(IAdvisorRepository advisorRepository, AdvisorModelAssembler assembler) {
         this.advisorRepository = advisorRepository;
         this.assembler = assembler;
@@ -68,7 +69,7 @@ public class AdvisorController {
                     advisor.setLastName(newAdvisor.getLastName());
                     advisor.setEmail(newAdvisor.getEmail());
                     advisor.setCompanyPhoneNumber(newAdvisor.getCompanyPhoneNumber());
-                    advisor.setAppointments(newAdvisor.getAppointments());
+                    advisor.setCreatedAppointments(newAdvisor.getCreatedAppointments());
 
                     return advisorRepository.save(advisor);
                 })

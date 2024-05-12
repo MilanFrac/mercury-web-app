@@ -1,13 +1,18 @@
 package com.codebrothers.mercury.domain;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "ADVISORS")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -17,7 +22,6 @@ public class Advisor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // @Column(name = "ADVISOR_ID")
     private long id;
 
     @Column(name = "FIRST_NAME")
@@ -26,6 +30,7 @@ public class Advisor {
     @Column(name = "LAST_NAME")
     private String lastName;
 
+    @NaturalId
     @NonNull
     @Column(name = "COMPANY_PHONE_NUMBER")
     private String companyPhoneNumber;
@@ -33,24 +38,48 @@ public class Advisor {
     @Column(name = "EMAIL")
     private String email;
 
+    /*
     @ManyToMany(
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
     )
     @JoinTable(
             name = "ADVISORS_APPOINTMENTS",
             joinColumns = @JoinColumn(name = "ADVISOR_ID"),
             inverseJoinColumns = @JoinColumn(name = "APPOINTMENT_ID")
     )
-    private Set<Appointment> appointments = new HashSet<>();
+    */
+    @JsonBackReference
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Appointment> createdAppointments = new LinkedHashSet<>();
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "lastUpdatedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Appointment> updatedAppointments = new HashSet<>();
 
     public void addAppointment(Appointment appointment) {
-        this.appointments.add(appointment);
-        appointment.getAdvisors().add(this);
+        this.createdAppointments.add(appointment);
+        appointment.setCreatedBy(this);
     }
 
     public void removeAppointment(Appointment appointment) {
-        this.appointments.remove(appointment);
-        appointment.getAdvisors().remove(this);
+        this.createdAppointments.remove(appointment);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (!(o instanceof Advisor))
+            return false;
+
+        Advisor advisor = (Advisor) o;
+        return Objects.equals(companyPhoneNumber, advisor.companyPhoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(companyPhoneNumber);
     }
 }
 

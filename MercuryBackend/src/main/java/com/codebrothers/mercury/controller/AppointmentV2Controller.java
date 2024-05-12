@@ -22,11 +22,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api2")
 public class AppointmentV2Controller {
 
-    @Autowired
-    private IAppointmentV2Repository appointmentRepository;
+    private final IAppointmentV2Repository appointmentRepository;
 
     private final AppointmentV2ModelAssembler assembler;
 
+    @Autowired
     AppointmentV2Controller(IAppointmentV2Repository appointmentRepository, AppointmentV2ModelAssembler assembler) {
         this.appointmentRepository = appointmentRepository;
         this.assembler = assembler;

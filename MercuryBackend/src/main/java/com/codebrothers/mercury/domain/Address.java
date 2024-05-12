@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "ADDRESSES")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Address {
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +34,4 @@ public class Address {
 
     @Column(name = "APARTMENT_NUMBER")
     private Integer apartmentNumber;
-
-    @OneToOne(mappedBy = "realizationPlace", cascade = CascadeType.ALL, orphanRemoval = true, fetch= FetchType.LAZY)
-    private Appointment appointment;
 }

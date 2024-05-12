@@ -1,34 +1,35 @@
 package com.codebrothers.mercury.domain;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "APPOINTMENTS")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // used for breaking the circular reference issues
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Appointment {
+public class Appointment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @JsonIgnoreProperties(value = {"APPOINTMENTS", "hibernateLazyInitializer"}) // Have to be left, otherwise serialization problems
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLIENT_ID")
     @NonNull private Client client;
 
-    @Column(name = "REALIZATION_DATE")
-    @NonNull private LocalDateTime realizationDate;
-
-    @JoinColumn(name = "ADDRESS_ID")
+    @JsonIgnoreProperties(value = {"APPOINTMENTS", "hibernateLazyInitializer"})
+    @JoinColumn(name = "EVENT_ID")
     @OneToOne(fetch = FetchType.LAZY)
-    @NonNull private Address realizationPlace;
+    @NonNull private Event event;
 
     @Column(name = "CREATED_AT_DATE")
     private LocalDateTime createdAtDate;
@@ -36,15 +37,29 @@ public class Appointment {
     @Column(name = "UPDATED_AT_DATE")
     private LocalDateTime updatedAtDate;
 
+    @JsonManagedReference
     @JoinColumn(name = "CREATED_BY")
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Advisor createdBy;
 
+    @JsonManagedReference
     @JoinColumn(name = "LAST_UPDATED_BY")
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Advisor lastUpdatedBy;
 
-//    @ManyToMany(mappedBy = "ADVISORS")
-    @ManyToMany(mappedBy = "appointments")
-    private Set<Advisor> advisors = new HashSet<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+
+        if (!(o instanceof Appointment))
+            return false;
+
+        return id != null && id.equals(((Appointment) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
