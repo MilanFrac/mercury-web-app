@@ -38,11 +38,13 @@ public class Appointment implements Serializable {
     private LocalDateTime updatedAtDate;
 
     @JsonManagedReference
+    @JsonIgnoreProperties(value = {"APPOINTMENTS", "hibernateLazyInitializer"})
     @JoinColumn(name = "CREATED_BY")
     @ManyToOne(fetch = FetchType.LAZY)
     private Advisor createdBy;
 
     @JsonManagedReference
+    @JsonIgnoreProperties(value = {"APPOINTMENTS", "hibernateLazyInitializer"})
     @JoinColumn(name = "LAST_UPDATED_BY")
     @ManyToOne(fetch = FetchType.LAZY)
     private Advisor lastUpdatedBy;
