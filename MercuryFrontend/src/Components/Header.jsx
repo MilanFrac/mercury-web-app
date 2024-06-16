@@ -1,24 +1,20 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import TextField from '@mui/material/TextField';
 import Modal from 'react-bootstrap/Modal';
-import NavGroup from '../routes/groups/NavGroup';
-import navItems from '../data/locations/navItems';
-import i18n from '../data/i18n';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import SettingsIcon from '@mui/icons-material/Settings';
-import Settings from '../routes/settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import AppointmentForm from '../routes/AppointmentForm';
+import Settings from '../routes/settings';
+import i18n from '../data/i18n';
 
 function Header() {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -50,23 +46,32 @@ function Header() {
           <Navbar.Toggle aria-controls="navbar" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
-              <NavGroup title={i18n.t('locations')} items={navItems}></NavGroup>
               <Nav.Link
                 as={NavLink}
                 to="/dashboard"
                 style={{ marginRight: '10px', marginLeft: '10px' }}>
                 {i18n.t('dashboard')}
               </Nav.Link>
-              <Button eventkey="Form" title="Create" onClick={handleCreateModalShow}>
+              <Nav.Link
+                as={NavLink}
+                to="/warehouse"
+                style={{ marginRight: '10px', marginLeft: '10px' }}>
+                {i18n.t('Warehouse')}
+              </Nav.Link>
+              <Button
+                eventkey="Form"
+                title="Create"
+                onClick={handleCreateModalShow}
+                style={{ backgroundColor: '#333333', color: '#ffffff' }}> 
                 {i18n.t('create')}
               </Button>
             </Nav>
-            <TextField id="outlined-search" label={i18n.t('search')} type="search" size="small" />
           </Navbar.Collapse>
         </Container>
         <div className="avatar-search-container">
           <div className="avatar-dropdown">
-            <Avatar variant="light" onClick={handleToggleSidebar}>
+            <Avatar variant="light" onClick={handleToggleSidebar}
+              style={{marginRight:'10px', backgroundColor: '#333333', color: '#ffffff' }}>                  
               RX
             </Avatar>
           </div>
@@ -120,7 +125,7 @@ function Header() {
             margin-left: 10px;
           }
           .avatar-dropdown {
-            margin-left: 10px;
+            margin-left: 5px; /* Adjust this value to move the RX button to the left */
           }
           .drawer-paper {
             background-color: #fff !important;
