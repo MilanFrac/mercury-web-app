@@ -57,18 +57,28 @@ function Header() {
               <Nav.Link
                 as={NavLink}
                 to="/dashboard"
-                style={{ marginRight: '10px', marginLeft: '10px' }}>
+                style={{ marginRight: '10px', marginLeft: '10px' }}
+                className="nav-link-effect">
                 Panel Pracownika
               </Nav.Link>
 
-              <Button eventkey="Form" title="Utwórz" onClick={handleModalShow}>
+              <Button
+                eventkey="Form"
+                title="Utwórz"
+                onClick={handleModalShow}
+                className="btn-effect">
                 Utwórz
               </Button>
             </Nav>
 
             <TextField id="outlined-search" label="Szukaj" type="search" size="small" />
 
-            <Button eventkey="Login" title="Wyloguj" as={Link} to="/login">
+            <Button
+              eventkey="Login"
+              title="Wyloguj"
+              as={Link}
+              to="/login"
+              className="btn-effect">
               Wyloguj
             </Button>
           </Navbar.Collapse>
