@@ -1,3 +1,4 @@
+// src/App.js
 import { useState, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
@@ -8,6 +9,7 @@ import Dashboard from './routes/Dashboard';
 import FullInfo from './routes/FullInfo';
 import LoginPage from './routes/Login';
 import AppointmentForm from './routes/AppointmentForm';
+import Warehouse from './Components/Warehouse';
 import { LanguageContext } from './data/LanguageContext';
 import Location from './Components/Location';
 
@@ -115,6 +117,15 @@ const App = () => {
             element={
               <AppLayout>
                 <Dashboard />
+              </AppLayout>
+            }
+          />
+          <Route
+            exact
+            path="/warehouse"
+            element={
+              <AppLayout>
+                <Warehouse />
               </AppLayout>
             }
           />
