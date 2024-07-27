@@ -5,7 +5,6 @@ export default function parseDescription(description) {
     'Address',
     'Phone number',
     'Service type',
-    'Product',
     'Realization date',
     'Description'
   ];
