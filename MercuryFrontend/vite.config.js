@@ -4,7 +4,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   define: {
     // eslint-disable-next-line no-undef
-    'process.env.REACT_APP_BACKEND_API_BASE_URL': `"${process.env.REACT_APP_BACKEND_API_BASE_URL}"`,
+    //'process.env.REACT_APP_BACKEND_API_BASE_URL': `"${process.env.REACT_APP_BACKEND_API_BASE_URL}"`,
+    'process.env.REACT_APP_BACKEND_API_BASE_URL': `"http://localhost:8080"`,
     'process.env.REACT_APP_PUBLIC_URL': `"/mercury-web-app"`
   },
   plugins: [react()],
@@ -18,7 +19,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    esbuildOptions: { define: { global: 'globalThis' } },
+    esbuildOptions: { define: { global: 'globalThis' } }
     //include: ['@mui/lab']
   }
 });
