@@ -16,4 +16,5 @@ public class EventDTO {
     private String description;
     private LocalDateTime realizationDate;
     private AddressDTO realizationPlace;
+    private String serviceType;
 }

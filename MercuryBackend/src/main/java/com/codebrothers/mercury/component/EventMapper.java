@@ -48,6 +48,7 @@ public class EventMapper {
                 addressDTO.getApartmentNumber()
         );
         event.setRealizationPlace(address);
+        event.setServiceType(dto.getServiceType());
 
         return event;
     }

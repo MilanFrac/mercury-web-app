@@ -33,4 +33,7 @@ public class Event implements Serializable {
     @JsonIgnoreProperties(value = {"EVENTS", "hibernateLazyInitializer"})
     @NonNull private Address realizationPlace;
 
+    @Column(name = "SERVICE_TYPE")
+    @NonNull private String serviceType;
+
 }

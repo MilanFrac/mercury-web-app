@@ -40,22 +40,34 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   dayjs.locale(i18n.language);
 
   const getAppointments = async () => {
+    let appointments = [];
+
     await axios
       .get(process.env.REACT_APP_BACKEND_API_BASE_URL + '/api/v1/appointments')
       .then((response) => {
-        const appointments = response.data._embedded.appointmentV2List.map((appointment) => {
+        appointments = response.data._embedded.appointmentList.map((appointment) => {
+          let client = appointment.client;
+          let event = appointment.event;
+          let address = appointment.event.realizationPlace;
+          let fullAddress = `${address.zipCode} ${address.cityName}, ${address.streetName} ${address.houseNumber}`;
+          if (address.apartmentNumber !== '') {
+            fullAddress += `/${address.apartmentNumber}`;
+          }
+
+          let desc = `${client.firstName};${client.lastName};${fullAddress};${client.phoneNumber};${event.serviceType};${event.realizationDate};${event.description};`;
+
           return {
             ...appointment,
             allDay: false,
-            title: `${appointment.services}#${appointment.id}`,
-            start: appointment.event.realizationDate,
+            title: `${appointment.event.title}#${appointment.id}`,
+            description: parseDescription(desc),
+            realizationDate: appointment.event.realizationDate,
             end: appointment.event.realizationDate
           };
         });
         setEvents(appointments);
-        console.log(appointments);
-        console.log(events[0]);
       });
+    return appointments;
   };
 
   useEffect(() => {
@@ -108,19 +120,19 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
       allDay: false,
       title: t('Instal-230'),
       description: parseDescription(
-        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;Żaluzje 800K;2023-07-29;Opis przykładowy;'
+        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;2023-07-29;Opis przykładowy;'
       ),
-      realizationDate: new Date(2024, 3, 27, 10, 30),
-      end: new Date(2024, 3, 17, 12, 30)
+      realizationDate: new Date(2024, 6, 27, 10, 30),
+      end: new Date(2024, 6, 27, 11, 30)
     },
     {
       allDay: false,
       title: t('Combo-231'),
       description: parseDescription(
-        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;Żaluzje 800K;2023-07-29;Opis przykładowy;'
+        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;2023-07-29;Opis przykładowy;'
       ),
-      realizationDate: new Date(2024, 3, 28, 12, 30),
-      end: new Date(2024, 3, 18, 12, 30)
+      realizationDate: new Date(2024, 6, 28, 12, 30),
+      end: new Date(2024, 6, 28, 13, 30)
     }
   ];
 
@@ -131,7 +143,7 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
           event: CustomEvent
         }}
         localizer={localizer}
-        events={sampleEvents}
+        events={events}
         startAccessor="realizationDate"
         endAccessor="realizationDate"
         tooltipAccessor="description"
@@ -159,7 +171,7 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
       />
 
       {isModalOpen && (
-        <Modal show={isModalOpen} onHide={handleModalClose} dialogClassName={{ maxWidth: '70vw' }}>
+        <Modal show={isModalOpen} onHide={handleModalClose} dialogClassName={{ maxWidth: '80vw' }}>
           <Modal.Header closeButton>
             <Modal.Title>{t('createEvent')}</Modal.Title>
           </Modal.Header>
