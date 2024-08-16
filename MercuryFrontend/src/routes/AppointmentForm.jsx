@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -11,13 +11,9 @@ import axios from 'axios';
 import services from '../data/services';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import parseDescription from '../handlers/longDescriptionHandler';
 
-export default function AppointmentForm({
-  onAddEvent,
-  onCloseModal,
-  setAllEvents,
-  selectedDate: initialDate
-}) {
+export default function AppointmentForm({ onAddEvent, onCloseModal, selectedDate: initialDate }) {
   const { t } = useTranslation();
   const appointmentsEndpoint = '/api/v1/appointments';
 
@@ -38,28 +34,12 @@ export default function AppointmentForm({
 
   const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    setSelectedDate(initialDate || new Date());
-  }, [initialDate]);
-
-  const handleAddEvent = () => {
-    const newEvent = {
-      title: serviceType, //value.map((service) => service.title).join(', '),
-      start: selectedDate,
-      end: selectedDate,
-      ...personalData
-    };
-
-    onAddEvent(newEvent);
-
-    setAllEvents?.((prevEvents) => [...prevEvents, newEvent]);
-
-    onCloseModal();
-  };
+  // useEffect(() => {
+  //   setSelectedDate(initialDate || new Date());
+  // }, [initialDate]);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    handleAddEvent();
 
     const formData = {
       client: {
@@ -91,11 +71,37 @@ export default function AppointmentForm({
         'Access-Control-Allow-Origin': '*'
       })
       .then((response) => {
-        console.log(response.status, response.data.token);
+        console.log(response.data);
+        let data = [response.data];
+        // Parse the response:
+        const newEvent = data.map((appointment) => {
+          let client = appointment.client;
+          let event = appointment.event;
+          let address = appointment.event.realizationPlace;
+          let fullAddress = `${address.zipCode} ${address.cityName}, ${address.streetName} ${address.houseNumber}`;
+          if (address.apartmentNumber !== '' || address.apartmentNumber !== null) {
+            fullAddress += `/${address.apartmentNumber}`;
+          }
+
+          let desc = `${client.firstName};${client.lastName};${fullAddress};${client.phoneNumber};${event.serviceType};${event.realizationDate};${event.description};`;
+
+          return {
+            ...appointment,
+            allDay: false,
+            title: `${appointment.event.title}#${appointment.id}`,
+            description: parseDescription(desc),
+            realizationDate: appointment.event.realizationDate,
+            end: appointment.event.realizationDate
+          };
+        });
+
+        onAddEvent(newEvent[0]);
       })
       .catch((err) => {
         console.log(err.message);
       });
+
+    onCloseModal();
   };
 
   return (
@@ -267,7 +273,7 @@ export default function AppointmentForm({
           <Grid item width="50%">
             <TextField
               fullWidth
-              id="aparmentNumberField"
+              id="apartmentNumberField"
               label={t('Apartment number')}
               variant="standard"
               value={personalData.numerMieszkania}
@@ -307,7 +313,7 @@ export default function AppointmentForm({
           <Grid item width="90%">
             <TextField
               id="descriptionField"
-              name="descriptionField"
+              name="description"
               label={t('description')}
               value={description}
               onChange={(e) => setDescription(e.target.value)}

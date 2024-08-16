@@ -81,29 +81,26 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
     setSelectedEvent(event);
   };
 
-  const handleNoopClick = (slot) => {
-    setIsModalOpen(true);
-    setSelectedDate(slot.start);
-  };
+  const handleNoopClick = useCallback(
+    (slot) => {
+      setIsModalOpen(true);
+      setSelectedDate(slot.start);
+    },
+    [setIsModalOpen, setSelectedDate]
+  );
 
-  const handleResize = () => {
-    setIsResponsive(this.state);
-    const isWindowSmall = window.innerWidth <= 600;
-
-    if (isWindowSmall && !{ isResponsive }) {
-      setIsResponsive(true);
-    } else if (!isWindowSmall && { isResponsive }) {
-      setIsResponsive(false);
-    }
-  };
-
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, [setIsModalOpen]);
 
-  const handleAddEventOutside = (newEvent) => {
-    console.log('New event:', newEvent);
-  };
+  const handleAddEventOutside = useCallback(
+    (newEvent) => {
+      // console.log('New event:', newEvent);
+      const newEvents = [...events, newEvent];
+      setEvents(newEvents);
+    },
+    [events, setEvents]
+  );
 
   const handleDelete = (event) => {
     console.log('TODO: implement event deleting:', event);
@@ -114,27 +111,6 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   };
 
   const onShowMore = useCallback((events, date) => window.alert(date), []);
-
-  const sampleEvents = [
-    {
-      allDay: false,
-      title: t('Instal-230'),
-      description: parseDescription(
-        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;2023-07-29;Opis przykładowy;'
-      ),
-      realizationDate: new Date(2024, 6, 27, 10, 30),
-      end: new Date(2024, 6, 27, 11, 30)
-    },
-    {
-      allDay: false,
-      title: t('Combo-231'),
-      description: parseDescription(
-        'Jan;Brzoza;03-432 Gdańsk, ul. Akacjowa 21A/2;+48508273556;Montaż;2023-07-29;Opis przykładowy;'
-      ),
-      realizationDate: new Date(2024, 6, 28, 12, 30),
-      end: new Date(2024, 6, 28, 13, 30)
-    }
-  ];
 
   return (
     <>
