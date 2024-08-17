@@ -11,6 +11,7 @@ import com.codebrothers.mercury.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -56,7 +57,9 @@ public class AppointmentMapper {
         Appointment appointment = new Appointment();
 
         // Set createdAtDate and updatedAtDate
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
+        //LocalDateTime now = LocalDateTime.now();
+
         if(dto.getCreatedAtDate().equals(null)) {
             appointment.setCreatedAtDate(now);
         } else {

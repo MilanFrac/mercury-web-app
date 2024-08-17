@@ -37,7 +37,8 @@ public class EventMapper {
         Event event = new Event();
         event.setTitle(dto.getTitle());
         event.setDescription(dto.getDescription());
-        event.setRealizationDate(dto.getRealizationDate());
+        event.setRealizationStartDate(dto.getRealizationStartDate());
+        event.setRealizationEndDate(dto.getRealizationEndDate());
 
         AddressDTO addressDTO = dto.getRealizationPlace();
         Address address = addressService.getOrCreateAddress(

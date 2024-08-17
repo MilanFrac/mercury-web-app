@@ -5,7 +5,8 @@ export default function parseDescription(description) {
     'Address',
     'Phone number',
     'Service type',
-    'Realization date',
+    'Realization start date',
+    'Realization end date',
     'Description'
   ];
   const args = description.split(';');

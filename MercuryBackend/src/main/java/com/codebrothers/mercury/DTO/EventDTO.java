@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 public class EventDTO {
     private String title;
     private String description;
-    private LocalDateTime realizationDate;
+    private Instant realizationStartDate;
+    private Instant realizationEndDate;
     private AddressDTO realizationPlace;
     private String serviceType;
 }

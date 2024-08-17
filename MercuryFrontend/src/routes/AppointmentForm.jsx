@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider, DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from 'react-bootstrap/Button';
 import plLocale from 'date-fns/locale/pl';
@@ -12,12 +12,19 @@ import services from '../data/services';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import parseDescription from '../handlers/longDescriptionHandler';
+import dayjs from 'dayjs';
 
-export default function AppointmentForm({ onAddEvent, onCloseModal, selectedDate: initialDate }) {
+export default function AppointmentForm({
+  onAddEvent,
+  onCloseModal,
+  selectedStartDate: initialDate,
+  selectedEndDate: finalDate
+}) {
   const { t } = useTranslation();
   const appointmentsEndpoint = '/api/v1/appointments';
 
-  const [selectedDate, setSelectedDate] = useState(initialDate || new Date());
+  const [selectedStartDate, setSelectedStartDate] = useState(initialDate || new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState(finalDate || new Date());
   const [personalData, setPersonalData] = useState({
     imie: '',
     nazwisko: '',
@@ -34,9 +41,13 @@ export default function AppointmentForm({ onAddEvent, onCloseModal, selectedDate
 
   const [errors, setErrors] = useState({});
 
+  const eightAM = dayjs().set('hour', 8).startOf('hour');
+  const sixPM = dayjs().set('hour', 18).startOf('hour');
+
   // useEffect(() => {
-  //   setSelectedDate(initialDate || new Date());
-  // }, [initialDate]);
+  //   setSelectedStartDate(initialDate || new Date());
+  //   setSelectedEndDate(finalDate || new Date());
+  // }, [initialDate, finalDate]);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
@@ -51,7 +62,8 @@ export default function AppointmentForm({ onAddEvent, onCloseModal, selectedDate
       event: {
         title: serviceType.title,
         description: description,
-        realizationDate: selectedDate,
+        realizationStartDate: selectedStartDate,
+        realizationEndDate: selectedEndDate,
         realizationPlace: {
           cityName: personalData.miasto,
           zipCode: personalData.kodPocztowy,
@@ -83,15 +95,15 @@ export default function AppointmentForm({ onAddEvent, onCloseModal, selectedDate
             fullAddress += `/${address.apartmentNumber}`;
           }
 
-          let desc = `${client.firstName};${client.lastName};${fullAddress};${client.phoneNumber};${event.serviceType};${event.realizationDate};${event.description};`;
+          let desc = `${client.firstName};${client.lastName};${fullAddress};${client.phoneNumber};${event.serviceType};${new Date(event.realizationStartDate).toLocaleString('pl-PL')};${new Date(event.realizationEndDate).toLocaleString('pl-PL')};${event.description};`;
 
           return {
             ...appointment,
             allDay: false,
             title: `${appointment.event.title}#${appointment.id}`,
             description: parseDescription(desc),
-            realizationDate: appointment.event.realizationDate,
-            end: appointment.event.realizationDate
+            realizationStartDate: new Date(appointment.event.realizationStartDate),
+            realizationEndDate: new Date(appointment.event.realizationEndDate)
           };
         });
 
@@ -323,28 +335,35 @@ export default function AppointmentForm({ onAddEvent, onCloseModal, selectedDate
             />
           </Grid>
         </Grid>
-        <Grid container justifyContent="center" columns={1}>
+        <Grid container justifyContent="center" columns={2}>
           <LocalizationProvider
             id="localizationProvider"
             dateAdapter={AdapterDateFns}
             adapterLocale={plLocale}>
             <Grid item>
-              <DatePicker
-                id="datePicker"
-                label={t('day')}
+              <DateTimePicker
+                id="startDateTimePicker"
+                label={t('Start time')}
                 firstDayOfWeek={1}
-                value={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                format="dd.MM.yyyy"
+                minTime={eightAM}
+                value={selectedStartDate}
+                onChange={(date) => {
+                  setSelectedStartDate(date);
+                }}
+                format="dd.MM.yyyy HH:mm"
               />
             </Grid>
             <Grid item>
-              <TimePicker
-                id="timePicker"
-                label={t('hour')}
-                value={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                format="HH:mm"
+              <DateTimePicker
+                id="endDateTimePicker"
+                label={t('End time')}
+                firstDayOfWeek={1}
+                maxTime={sixPM}
+                value={selectedEndDate}
+                onChange={(date) => {
+                  setSelectedEndDate(date);
+                }}
+                format="dd.MM.yyyy HH:mm"
               />
             </Grid>
           </LocalizationProvider>
@@ -367,7 +386,7 @@ export default function AppointmentForm({ onAddEvent, onCloseModal, selectedDate
                 onCloseModal();
               }}
               style={{ marginTop: '15px' }}>
-              {t('cancel')}
+              {t('Cancel')}
             </Button>
           </Grid>
         </Grid>
@@ -380,5 +399,6 @@ AppointmentForm.propTypes = {
   onAddEvent: PropTypes.func,
   onCloseModal: PropTypes.func,
   setAllEvents: PropTypes.func,
-  selectedDate: PropTypes.object
+  selectedStartDate: PropTypes.object,
+  selectedEndDate: PropTypes.object
 };

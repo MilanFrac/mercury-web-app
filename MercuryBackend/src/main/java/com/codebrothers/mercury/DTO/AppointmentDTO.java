@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -15,8 +15,8 @@ public class AppointmentDTO {
     private Long id;
     private Long clientId;
     private Long eventId;
-    private LocalDateTime createdAtDate;
-    private LocalDateTime updatedAtDate;
+    private Instant createdAtDate;
+    private Instant updatedAtDate;
     private Long createdByAdvisorId;
     private Long lastUpdatedByAdvisorId;
 }

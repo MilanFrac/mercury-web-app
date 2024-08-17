@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,7 +120,7 @@ public class AppointmentController {
                     appointment.setClient(newAppointment.getClient()); // Received from specific form section
                     appointment.setEvent(newAppointment.getEvent());
                     // appointment.setAdvisors(newAppointment.getAdvisors()); // Chosen from multiselect list of Advisors
-                    appointment.setUpdatedAtDate(LocalDateTime.now()); // Better to get the time from backend?? TODO: discuss it
+                    appointment.setUpdatedAtDate(Instant.now()); // Better to get the time from backend?? TODO: discuss it
                     appointment.setLastUpdatedBy(newAppointment.getLastUpdatedBy()); // Received from frontend based on Id of logged in Advisor
                     appointment.setCreatedAtDate(newAppointment.getCreatedAtDate()); // Already set, but can be updated ?? I don't think so... TODO: discuss if should be removed
                     appointment.setCreatedBy(newAppointment.getCreatedBy()); // Already set, but can be updated ?? I don't think so... TODO: discuss if should be removed

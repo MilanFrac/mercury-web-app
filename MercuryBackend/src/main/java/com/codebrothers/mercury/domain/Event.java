@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "EVENTS")
@@ -25,8 +25,11 @@ public class Event implements Serializable {
     @Column(name = "DESCRIPTION")
     @NonNull private String description;
 
-    @Column(name = "REALIZATION_DATE")
-    @NonNull private LocalDateTime realizationDate;
+    @Column(name = "REALIZATION_START_DATE")
+    @NonNull private Instant realizationStartDate;
+
+    @Column(name = "REALIZATION_END_DATE")
+    @NonNull private Instant realizationEndDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESS_ID")

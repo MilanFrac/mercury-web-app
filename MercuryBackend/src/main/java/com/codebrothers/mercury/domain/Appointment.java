@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "APPOINTMENTS")
@@ -32,10 +32,10 @@ public class Appointment implements Serializable {
     @NonNull private Event event;
 
     @Column(name = "CREATED_AT_DATE")
-    private LocalDateTime createdAtDate;
+    private Instant createdAtDate;
 
     @Column(name = "UPDATED_AT_DATE")
-    private LocalDateTime updatedAtDate;
+    private Instant updatedAtDate;
 
     @JsonManagedReference
     @JsonIgnoreProperties(value = {"APPOINTMENTS", "hibernateLazyInitializer"})

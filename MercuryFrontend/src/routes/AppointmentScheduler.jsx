@@ -13,7 +13,7 @@ import { LanguageContext } from '../data/LanguageContext';
 import AppointmentForm from './AppointmentForm';
 import parseDescription from '../handlers/longDescriptionHandler';
 
-dayjs.locale(i18n);
+// dayjs.locale(i18n);
 
 export function CustomEvent(event) {
   return (
@@ -32,7 +32,8 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [isResponsive, setIsResponsive] = useState(false);
   const [events, setEvents] = useState([]);
   const language = useContext(LanguageContext);
@@ -54,15 +55,15 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
             fullAddress += `/${address.apartmentNumber}`;
           }
 
-          let desc = `${client.firstName};${client.lastName};${fullAddress};${client.phoneNumber};${event.serviceType};${event.realizationDate};${event.description};`;
+          let desc = `${client.firstName};${client.lastName};${fullAddress};${client.phoneNumber};${event.serviceType};${new Date(event.realizationStartDate).toLocaleString('pl-PL')};${new Date(event.realizationEndDate).toLocaleString('pl-PL')};${event.description};`;
 
           return {
             ...appointment,
             allDay: false,
             title: `${appointment.event.title}#${appointment.id}`,
             description: parseDescription(desc),
-            realizationDate: appointment.event.realizationDate,
-            end: appointment.event.realizationDate
+            realizationStartDate: new Date(appointment.event.realizationStartDate),
+            realizationEndDate: new Date(appointment.event.realizationEndDate)
           };
         });
         setEvents(appointments);
@@ -84,9 +85,12 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   const handleNoopClick = useCallback(
     (slot) => {
       setIsModalOpen(true);
-      setSelectedDate(slot.start);
+      setSelectedStartDate(slot.start);
+      let endDate = new Date(slot.start);
+      endDate.setHours(endDate.getHours() + 1);
+      setSelectedEndDate(endDate);
     },
-    [setIsModalOpen, setSelectedDate]
+    [setIsModalOpen, setSelectedStartDate, setSelectedEndDate]
   );
 
   const handleModalClose = useCallback(() => {
@@ -120,8 +124,8 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
         }}
         localizer={localizer}
         events={events}
-        startAccessor="realizationDate"
-        endAccessor="realizationDate"
+        startAccessor="realizationStartDate"
+        endAccessor="realizationEndDate"
         tooltipAccessor="description"
         style={{ height: 700, margin: '50px', width: '100%' }}
         onSelectEvent={handleEventClick}
@@ -156,7 +160,8 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
               onAddEvent={handleAddEventOutside}
               onCloseModal={handleModalClose}
               onConfirm={handleModalClose}
-              selectedDate={selectedDate}
+              selectedStartDate={selectedStartDate}
+              selectedEndDate={selectedEndDate}
             />
           </Modal.Body>
         </Modal>
