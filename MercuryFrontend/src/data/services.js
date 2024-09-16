@@ -1,3 +1,3 @@
-const services = [{ title: 'Montaż' }, { title: 'Reklamacja' }, { title: 'Pomiar' }];
+const services = [{ title: '' }, { title: 'Montaż' }, { title: 'Reklamacja' }, { title: 'Pomiar' }];
 
 export default services;
