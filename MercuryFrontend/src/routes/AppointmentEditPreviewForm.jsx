@@ -13,6 +13,8 @@ import plLocale from 'date-fns/locale/pl';
 import services from '../data/services';
 import parseDescription from '../handlers/longDescriptionHandler';
 import dayjs from 'dayjs';
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, selectedEvent }) {
   const { t } = useTranslation();
@@ -22,44 +24,33 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
   const sixPM = dayjs().set('hour', 18).startOf('hour');
 
   const [errors, setErrors] = useState({});
-
-  // const [tempEvent, setTempEvent] = useState(selectedEvent);
-  //DEBUG: console.log(selectedEvent);
+  const [isLocked, setIsLocked] = useState(true); // Stan kłódki
 
   const [appointment, setAppointment] = useState({
     id: selectedEvent.id,
-    // client:
     email: selectedEvent.client.email,
     firstName: selectedEvent.client.firstName,
     lastName: selectedEvent.client.lastName,
     phoneNumber: selectedEvent.client.phoneNumber,
-    // event:
     event: selectedEvent.event,
     title: selectedEvent.event.title,
     description: selectedEvent.event.description,
     serviceType: selectedEvent.event.serviceType,
     realizationStartDate: selectedEvent.event.realizationStartDate,
     realizationEndDate: selectedEvent.event.realizationEndDate,
-    // event.realizationPlace:
     streetName: selectedEvent.event.realizationPlace.streetName,
     houseNumber: selectedEvent.event.realizationPlace.houseNumber,
     apartmentNumber: selectedEvent.event.realizationPlace.apartmentNumber,
     cityName: selectedEvent.event.realizationPlace.cityName,
     zipCode: selectedEvent.event.realizationPlace.zipCode,
-    // rest info...
     allDay: selectedEvent.allDay,
     createdAtDate: selectedEvent.createdAtDate,
     createdBy: selectedEvent.createdBy,
     updatedAtDate: selectedEvent.updatedAtDate,
-    lastUpdatedBy: selectedEvent.lastUpdatedBy // FEATURE TO BE UPGRADED
-    // title: selectedEvent.title,
-    // description: selectedEvent.description,
-    // realizationStartDate: selectedEvent.realizationStartDate,
-    // realizationEndDate: selectedEvent.realizationEndDate
+    lastUpdatedBy: selectedEvent.lastUpdatedBy
   });
 
   const handleChange = (e) => {
-    console.log(e);
     if (e.target.name !== '' && e.target.name !== undefined) {
       setAppointment((prevState) => ({
         ...prevState,
@@ -77,54 +68,32 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
     }
   };
 
-  /*
-  const [personalData, setPersonalData] = useState({
-    imie: tempEvent?.client?.firstName,
-    nazwisko: tempEvent?.client?.lastName,
-    numerTelefonu: tempEvent?.client?.phoneNumber,
-    adresMailowy: tempEvent?.client?.email,
-    miasto: tempEvent?.event?.realizationPlace?.cityName,
-    ulica: tempEvent?.event?.realizationPlace?.streetName,
-    numerDomu: tempEvent?.event?.realizationPlace?.houseNumber,
-    numerMieszkania: tempEvent?.event?.realizationPlace?.apartmentNumber,
-    kodPocztowy: tempEvent?.event?.realizationPlace?.zipCode
-  });
+  
+  
 
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
-
-  const [description, setDescription] = useState(tempEvent?.event?.description);
-  const [serviceType, setServiceType] = useState({ title: `${tempEvent?.event?.serviceType}` });
-  */
-
-  const onEditEvent = (e) => {
-    console.log(`Event edited: ${e}`);
-  };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implement edition of appointment on submit
-
     const formData = {
       client: {
-        phoneNumber: appointment.client.phoneNumber, // personalData.numerTelefonu,
-        firstName: appointment.client.firstName, // personalData.imie,
-        lastName: appointment.client.lastName, // personalData.nazwisko,
-        email: appointment.client.email // personalData.adresMailowy
+        phoneNumber: appointment.client.phoneNumber,
+        firstName: appointment.client.firstName,
+        lastName: appointment.client.lastName,
+        email: appointment.client.email
       },
       event: {
-        title: appointment.event.title, // selectedEvent.serviceType.title,
-        description: appointment.event.description, // selectedEvent.description,
-        realizationStartDate: appointment.event.realizationStartDate, // selectedEvent.selectedStartDate,
-        realizationEndDate: appointment.event.realizationEndDate, // selectedEvent.selectedEndDate,
+        title: appointment.event.title,
+        description: appointment.event.description,
+        realizationStartDate: appointment.event.realizationStartDate,
+        realizationEndDate: appointment.event.realizationEndDate,
         realizationPlace: {
-          cityName: appointment.event.realizationPlace.cityName, // personalData.miasto,
-          zipCode: appointment.event.realizationPlace.zipCode, // personalData.kodPocztowy,
-          streetName: appointment.event.realizationPlace.streetName, // personalData.ulica,
-          houseNumber: appointment.event.realizationPlace.houseNumber, // personalData.numerDomu,
-          apartmentNumber: appointment.event.realizationPlace.apartmentNumber // personalData.numerMieszkania
+          cityName: appointment.event.realizationPlace.cityName,
+          zipCode: appointment.event.realizationPlace.zipCode,
+          streetName: appointment.event.realizationPlace.streetName,
+          houseNumber: appointment.event.realizationPlace.houseNumber,
+          apartmentNumber: appointment.event.realizationPlace.apartmentNumber
         },
-        serviceType: appointment.event.serviceType // selectedEvent.serviceType.title
+        serviceType: appointment.event.serviceType
       },
       createdAtDate: appointment.createdAtDate,
       updatedAtDate: appointment.updatedAtDate,
@@ -136,51 +105,42 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
         'Access-Control-Allow-Origin': '*'
       })
       .then((response) => {
-        console.log(response.data);
-        let data = [response.data];
-        // Parse the response:
-        const newEvent = data.map((appointment) => {
-          let client = appointment.client;
-          let event = appointment.event;
-          let address = appointment.event.realizationPlace;
-          let fullAddress = `${address.zipCode} ${address.cityName}, ${address.streetName} ${address.houseNumber}`;
-          if (address.apartmentNumber !== '' || address.apartmentNumber !== null) {
-            fullAddress += `/${address.apartmentNumber}`;
-          }
-
-          let desc = `${client.firstName};${client.lastName};${fullAddress};${client.phoneNumber};${event.serviceType};${new Date(event.realizationStartDate).toLocaleString('pl-PL')};${new Date(event.realizationEndDate).toLocaleString('pl-PL')};${event.description};`;
-
-          return {
-            ...appointment,
-            allDay: false,
-            title: `${appointment.event.title}#${appointment.id}`,
-            description: parseDescription(desc),
-            realizationStartDate: new Date(appointment.event.realizationStartDate),
-            realizationEndDate: new Date(appointment.event.realizationEndDate)
-          };
-        });
-
-        onEditEvent(newEvent[0]);
+        onConfirm();
       })
       .catch((err) => {
         console.log(err.message);
       });
+  };
 
-    onConfirm();
+  const toggleLock = () => {
+    setIsLocked((prevIsLocked) => !prevIsLocked);
   };
 
   return (
+    
     <Box
       id="editPreviewAppointmentForm"
       component="form"
       onSubmit={handleOnSubmit}
       sx={{
         background: '#',
-        '& .MuiTextField-root': { margin: 1, marginRight: 0, width: '100%' }
+        width: '100%', // 80% szerokości okna przeglądarki
+        height: '70%', // 90% wysokości okna przeglądarki
+        padding: '10px', // Margines wewnętrzny
+
+        '& .MuiTextField-root': { margin: 1, width: '100%' }
       }}
       noValidate
       autoComplete="off">
-      <Grid container direction="row" justify="flex-start" alignItems="flex-start" columns={1}>
+      <Grid container direction="row" justify="flex-start" alignItems="flex-start" columns={1}
+      sx={{
+        background: '#',
+        width: '100%', // 80% szerokości okna przeglądarki
+        height: '70%', // 90% wysokości okna przeglądarki
+        padding: '10px', // Margines wewnętrzny
+        
+        '& .MuiTextField-root': { margin: 1, width: '100%' }
+      }}>
         <Grid container justifyContent="space-around">
           <Grid item>
             <TextField
@@ -190,18 +150,8 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               variant="standard"
               fullWidth
               value={appointment.firstName}
-              onChange={(e) => {
-                const newValue = e.target.value;
-                if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
-                  handleChange(e); // setPersonalData((prevData) => ({ ...prevData, imie: newValue }));
-                  setErrors((prevErrors) => ({ ...prevErrors, imie: '' }));
-                } else {
-                  setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    imie: t('Name can contain only letters')
-                  }));
-                }
-              }}
+              onChange={handleChange}
+              disabled={isLocked} // Zablokowane pole
               error={Boolean(errors.imie)}
               helperText={errors.imie}
             />
@@ -214,24 +164,14 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               variant="standard"
               fullWidth
               value={appointment.lastName}
-              onChange={(e) => {
-                const newValue = e.target.value;
-                if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
-                  handleChange(e); // setPersonalData((prevData) => ({ ...prevData, nazwisko: newValue }));
-                  setErrors((prevErrors) => ({ ...prevErrors, nazwisko: '' }));
-                } else {
-                  setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    nazwisko: t('Last name can contain only letters')
-                  }));
-                }
-              }}
+              onChange={handleChange}
+              disabled={isLocked} // Zablokowane pole
               error={Boolean(errors.nazwisko)}
               helperText={errors.nazwisko}
             />
           </Grid>
-        </Grid>
-        <Grid container justifyContent="space-around">
+          </Grid>
+          <Grid container justifyContent="space-around">
           <Grid item>
             <TextField
               id="phoneNumber"
@@ -254,6 +194,8 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               }}
               error={Boolean(errors.numerTelefonu)}
               helperText={errors.numerTelefonu}
+              disabled={isLocked} // Zablokowany przycisk
+
             />
           </Grid>
           <Grid item>
@@ -269,7 +211,10 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               }}
               error={Boolean(errors.adresMailowy)}
               helperText={errors.adresMailowy}
+              disabled={isLocked} // Zablokowany przycisk
             />
+          <Grid item>
+          </Grid>
           </Grid>
         </Grid>
         <Grid container justifyContent="space-around">
@@ -281,6 +226,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               variant="standard"
               fullWidth
               value={appointment.cityName}
+              disabled={isLocked} // Zablokowany przycisk
               onChange={(e) => {
                 const newValue = e.target.value;
                 if (/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]*$/.test(newValue)) {
@@ -308,23 +254,25 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               onChange={handleChange}
               error={Boolean(errors.kodPocztowy)}
               helperText={errors.kodPocztowy}
+              disabled={isLocked} // Zablokowany przycisk
+
             />
           </Grid>
         </Grid>
-        <Grid container justifyContent="space-around" columns={2}>
+
+        <Grid container justifyContent="space-around">
           <Grid item>
             <TextField
               id="streetName"
               name="streetName"
-              label={t('street')}
+              label={t('Street name')}
               variant="standard"
               fullWidth
               value={appointment.streetName}
-              onChange={(e) => {
-                handleChange(e); // setPersonalData((prevData) => ({ ...prevData, ulica: e.target.value }))
-              }}
-              error={Boolean(errors.ulica)}
-              helperText={errors.ulica}
+              onChange={handleChange}
+              disabled={isLocked} // Zablokowane pole
+              error={Boolean(errors.streetName)}
+              helperText={errors.streetName}
             />
           </Grid>
           <Grid item>
@@ -333,48 +281,41 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               name="houseNumber"
               label={t('House number')}
               variant="standard"
-              value={appointment.houseNumber}
-              onChange={(e) => {
-                handleChange(e); // setPersonalData((prevData) => ({ ...prevData, numerDomu: e.target.value }))
-              }}
-              error={Boolean(errors.numerDomu)}
-              helperText={errors.numerDomu}
-            />
-          </Grid>
-          <Grid item width="50%">
-            <TextField
               fullWidth
-              id="apartmentNumber"
-              name="apartmentNumber"
-              label={t('Apartment number')}
-              variant="standard"
-              value={appointment.apartmentNumber}
+              value={appointment.houseNumber}
               onChange={handleChange}
-              error={Boolean(errors.numerMieszkania)}
-              helperText={errors.numerMieszkania}
+              disabled={isLocked} // Zablokowane pole
+              error={Boolean(errors.houseNumber)}
+              helperText={errors.houseNumber}
             />
           </Grid>
         </Grid>
-        <Grid container justifyContent="center" columns={1}>
-          <Grid item width="50%">
+        {/* Autocomplete - typ usługi */}
+        <Grid container justifyContent="space-around">
+          <Grid item>
             <Autocomplete
-              fullWidth
-              multiple={false}
+              disablePortal
               id="serviceType"
+              name="serviceType"
               options={services}
-              getOptionLabel={(option) => option.title}
-              isOptionEqualToValue={(option, value) => option.value === value.value}
-              value={{ title: appointment.serviceType }}
-              onChange={(_) => handleChange(_)}
+              getOptionLabel={(option) => option.label || ''}
+              value={services.find((option) => option.label === appointment.serviceType) || null}
+              isOptionEqualToValue={(option, value) => option.label === value.label}
+              onChange={(e, newValue) => {
+                setAppointment((prevState) => ({
+                  ...prevState,
+                  serviceType: newValue ? newValue.label : ''
+                }));
+              }}
+              disabled={isLocked} // Zablokowane pole
               renderInput={(params) => (
                 <TextField
-                  id="serviceTypeField"
                   {...params}
-                  label={t('Service')}
+                  label={t('Service Type')}
                   variant="standard"
                   fullWidth
-                  error={Boolean(errors.services)}
-                  helperText={errors.services}
+                  error={Boolean(errors.serviceType)}
+                  helperText={errors.serviceType}
                 />
               )}
             />
@@ -391,9 +332,12 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               multiline={true}
               maxRows={4}
               variant="outlined"
+              disabled={isLocked} // Zablokowany przycisk
             />
           </Grid>
         </Grid>
+
+        {/* Data i czas */}
         <Grid container justifyContent="center" columns={2}>
           <LocalizationProvider
             id="localizationProvider"
@@ -408,6 +352,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
                 minTime={eightAM}
                 value={new Date(appointment.realizationStartDate)}
                 onChange={handleChange}
+                disabled={isLocked} // Zablokowane pole
                 format="dd.MM.yyyy HH:mm"
               />
             </Grid>
@@ -420,30 +365,51 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
                 maxTime={sixPM}
                 value={new Date(appointment.realizationEndDate)}
                 onChange={handleChange}
+                disabled={isLocked} // Zablokowane pole
                 format="dd.MM.yyyy HH:mm"
               />
             </Grid>
           </LocalizationProvider>
         </Grid>
+
+        {/* Przycisk Zapisz */}
         <Grid container>
+        <Grid item>
+  <Button
+    id="submitButton"
+    variant="success"
+    type="submit"
+    style={{ marginTop: '10px', marginRight: '10px' }} // Tutaj jest 10px marginesu
+    disabled={isLocked}
+  >
+    {t('Edit')}
+  </Button>
+</Grid>
+<Grid item>
+  <Button
+    id="cancelButton"
+    variant="danger"
+    onClick={onCloseModal}
+    style={{ marginTop: '10px' }} // Zmieniono na 10px, aby zrównać z Edit
+    disabled={false}
+  >
+    {t('Cancel')}
+  </Button>
+</Grid>
+        </Grid>
+
+        {/* Ikona kłódki */}
+        <Grid container justifyContent="flex-end">
           <Grid item>
             <Button
-              id="submitButton"
-              variant="success"
-              type="submit"
-              style={{ marginTop: '15px', marginRight: '10px' }}>
-              {t('Edit')}
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              id="cancelButton"
-              variant="danger"
-              onClick={() => {
-                onCloseModal();
-              }}
-              style={{ marginTop: '15px' }}>
-              {t('Cancel')}
+              id="lockButton"
+              onClick={toggleLock}
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                right: '10px',
+              }}>
+              {isLocked ? <LockIcon /> : <LockOpenIcon />}
             </Button>
           </Grid>
         </Grid>
