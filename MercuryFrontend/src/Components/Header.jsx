@@ -99,7 +99,7 @@ export default function Header() {
         <Modal
           show={showCreateModal}
           onHide={handleCreateModalClose}
-          dialogClassName={{ maxWidth: '70vw' }}>
+          size='lg'>
           <Modal.Header closeButton>
             <Modal.Title>{i18n.t('create')} Event</Modal.Title>
           </Modal.Header>

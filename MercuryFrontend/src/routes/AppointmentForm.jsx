@@ -121,9 +121,13 @@ export default function AppointmentForm({
       id="addAppointmentForm"
       component="form"
       onSubmit={handleOnSubmit}
+
       sx={{
         background: '#',
-        '& .MuiTextField-root': { margin: 1, marginRight: 0, width: '100%' }
+        width: '100%', // 80% szerokości okna przeglądarki
+        height: '70%', // 90% wysokości okna przeglądarki
+        padding: '10px', // Margines wewnętrzny
+        '& .MuiTextField-root': { margin: 1, width: '100%' }
       }}
       noValidate
       autoComplete="off">
