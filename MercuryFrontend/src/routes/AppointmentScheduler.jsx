@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Calendar, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -14,8 +14,14 @@ import AppointmentForm from './AppointmentForm';
 import parseDescription from '../handlers/longDescriptionHandler';
 import AppointmentEditPreviewForm from './AppointmentEditPreviewForm';
 
-// dayjs.locale(i18n);
+// Definicja enum dla widoków kalendarza
+export const CalendarViews = Object.freeze({
+  MONTH: 'month',
+  WEEK: 'week',
+  DAY: 'day'
+});
 
+// Customowy komponent do wyświetlania zdarzeń w kalendarzu
 export function CustomEvent(event) {
   return (
     <>
@@ -32,7 +38,6 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   const { t } = useTranslation();
   const [selectedEvent, setSelectedEvent] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const [isEditPreviewModalOpen, setIsEditPreviewModalOpen] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -40,15 +45,16 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   const [events, setEvents] = useState([]);
   const language = useContext(LanguageContext);
 
+  // Ustawienie lokalizacji dla dayjs
   dayjs.locale(i18n.language);
 
+  // Pobranie zdarzeń z backendu
   const getAppointments = async () => {
     let appointments = [];
 
     await axios
       .get(process.env.REACT_APP_BACKEND_API_BASE_URL + '/api/v1/appointments')
       .then((response) => {
-        let appointments;
         try {
           appointments = response.data._embedded.appointmentList.map((appointment) => {
             let client = appointment.client;
@@ -86,7 +92,6 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
-    console.log(selectedEvent);
     setIsEditPreviewModalOpen(true);
   };
 
@@ -107,7 +112,6 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
 
   const handleAddEventOutside = useCallback(
     (newEvent) => {
-      // console.log('New event:', newEvent);
       const newEvents = [...events, newEvent];
       setEvents(newEvents);
     },
@@ -115,7 +119,6 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
   );
 
   const handleEditPreviewModalClose = () => {
-    console.log('Closing EDIT/PREVIEW modal');
     setIsEditPreviewModalOpen(false);
   };
 
@@ -146,9 +149,9 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
         onShowMore={onShowMore}
         selectable={true}
         views={{
-          month: true,
-          week: true,
-          day: true
+          [CalendarViews.MONTH]: true,
+          [CalendarViews.WEEK]: true,
+          [CalendarViews.DAY]: true
         }}
         formats={{
           dayFormat: dayFormat
@@ -164,7 +167,7 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
       />
 
       {isModalOpen && (
-        <Modal show={isModalOpen} onHide={handleModalClose} dialogClassName={{ maxWidth: '80vw' }}>
+        <Modal show={isModalOpen} onHide={handleModalClose} size="lg">
           <Modal.Header closeButton>
             <Modal.Title>{t('createEvent')}</Modal.Title>
           </Modal.Header>
@@ -181,12 +184,9 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
       )}
 
       {isEditPreviewModalOpen && (
-        <Modal
-          show={isEditPreviewModalOpen}
-          onHide={handleEditPreviewModalClose}
-          dialogClassName={{ maxWidth: '80vw' }}>
+        <Modal show={isEditPreviewModalOpen} onHide={handleEditPreviewModalClose} size="lg">
           <Modal.Header closeButton>
-            <Modal.Title>{t('previewEditEvent')}</Modal.Title>
+            <Modal.Title>{t('Edit')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <AppointmentEditPreviewForm
@@ -204,5 +204,3 @@ export default function AppointmentScheduler({ localizer = dayjsLocalizer(dayjs)
 AppointmentScheduler.propTypes = {
   localizer: PropTypes.object
 };
-
-dayjs.locale();
