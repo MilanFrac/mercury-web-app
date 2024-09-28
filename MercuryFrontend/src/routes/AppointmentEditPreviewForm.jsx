@@ -4,7 +4,6 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import Button from '@mui/material/Button';
@@ -15,6 +14,8 @@ import services from '../data/services';
 import dayjs from 'dayjs';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { StyledTextField } from '../Components/CustomStyledMUIComponents/StyledTextField';
+import { StyledDateTimePicker } from '../Components/CustomStyledMUIComponents/StyledDateTimePicker';
 
 export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, selectedEvent }) {
   const { t } = useTranslation();
@@ -51,6 +52,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
   });
 
   const handleChange = (e) => {
+    console.log(e);
     if (e.target.name !== '' && e.target.name !== undefined) {
       setAppointment((prevState) => ({
         ...prevState,
@@ -145,7 +147,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
         }}>
         <Grid container justifyContent="space-around">
           <Grid item>
-            <TextField
+            <StyledTextField
               id="firstName"
               name="firstName"
               label={t('firstName')}
@@ -159,7 +161,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
             />
           </Grid>
           <Grid item>
-            <TextField
+            <StyledTextField
               id="lastName"
               name="lastName"
               label={t('lastName')}
@@ -175,7 +177,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
         </Grid>
         <Grid container justifyContent="space-around">
           <Grid item>
-            <TextField
+            <StyledTextField
               id="phoneNumber"
               name="phoneNumber"
               label={t('phoneNumber')}
@@ -200,7 +202,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
             />
           </Grid>
           <Grid item>
-            <TextField
+            <StyledTextField
               id="email"
               name="email"
               label={t('email')}
@@ -219,7 +221,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
         </Grid>
         <Grid container justifyContent="space-around">
           <Grid item>
-            <TextField
+            <StyledTextField
               id="cityName"
               name="cityName"
               label={t('city')}
@@ -244,7 +246,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
             />
           </Grid>
           <Grid item>
-            <TextField
+            <StyledTextField
               id="zipCode"
               name="zipCode"
               label={t('postalCode')}
@@ -261,7 +263,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
 
         <Grid container justifyContent="space-around">
           <Grid item>
-            <TextField
+            <StyledTextField
               id="streetName"
               name="streetName"
               label={t('Street name')}
@@ -275,7 +277,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
             />
           </Grid>
           <Grid item>
-            <TextField
+            <StyledTextField
               id="houseNumber"
               name="houseNumber"
               label={t('House number')}
@@ -291,7 +293,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
         </Grid>
         {/* Autocomplete - typ usługi */}
         <Grid container justifyContent="space-around">
-          <Grid item>
+          <Grid item width="50%">
             <Autocomplete
               disablePortal
               id="serviceType"
@@ -308,7 +310,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               }}
               disabled={isLocked} // Zablokowane pole
               renderInput={(params) => (
-                <TextField
+                <StyledTextField
                   {...params}
                   label={t('Service Type')}
                   variant="standard"
@@ -322,7 +324,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
         </Grid>
         <Grid container justifyContent="space-around" columns={1}>
           <Grid item width="90%">
-            <TextField
+            <StyledTextField
               id="description"
               name="description"
               label={t('description')}
@@ -337,13 +339,13 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
         </Grid>
 
         {/* Data i czas */}
-        <Grid container justifyContent="center" columns={2}>
+        <Grid container justifyContent="space-around" columns={2}>
           <LocalizationProvider
             id="localizationProvider"
             dateAdapter={AdapterDateFns}
             adapterLocale={plLocale}>
-            <Grid item>
-              <DateTimePicker
+            <Grid item width="40%">
+              <StyledDateTimePicker
                 id="startDateTimePicker"
                 name="realizationStartDate"
                 label={t('Start time')}
@@ -355,8 +357,8 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
                 format="dd.MM.yyyy HH:mm"
               />
             </Grid>
-            <Grid item>
-              <DateTimePicker
+            <Grid item width="40%">
+              <StyledDateTimePicker
                 id="endDateTimePicker"
                 name="realizationEndDate"
                 label={t('End time')}
