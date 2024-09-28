@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import plLocale from 'date-fns/locale/pl';
 import services from '../data/services';
-import parseDescription from '../handlers/longDescriptionHandler';
+// import parseDescription from '../handlers/longDescriptionHandler';
 import dayjs from 'dayjs';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
@@ -68,10 +68,6 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
     }
   };
 
-  
-  
-
-
   const handleOnSubmit = (e) => {
     e.preventDefault();
     const formData = {
@@ -101,10 +97,12 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
     };
 
     axios
+      // eslint-disable-next-line no-undef
       .post(process.env.REACT_APP_BACKEND_API_BASE_URL + appointmentsEndpoint, formData, {
         'Access-Control-Allow-Origin': '*'
       })
       .then((response) => {
+        console.log(response);
         onConfirm();
       })
       .catch((err) => {
@@ -117,7 +115,6 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
   };
 
   return (
-    
     <Box
       id="editPreviewAppointmentForm"
       component="form"
@@ -132,15 +129,20 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
       }}
       noValidate
       autoComplete="off">
-      <Grid container direction="row" justify="flex-start" alignItems="flex-start" columns={1}
-      sx={{
-        background: '#',
-        width: '100%', // 80% szerokości okna przeglądarki
-        height: '70%', // 90% wysokości okna przeglądarki
-        padding: '10px', // Margines wewnętrzny
-        
-        '& .MuiTextField-root': { margin: 1, width: '100%' }
-      }}>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="flex-start"
+        columns={1}
+        sx={{
+          background: '#',
+          width: '100%', // 80% szerokości okna przeglądarki
+          height: '70%', // 90% wysokości okna przeglądarki
+          padding: '10px', // Margines wewnętrzny
+
+          '& .MuiTextField-root': { margin: 1, width: '100%' }
+        }}>
         <Grid container justifyContent="space-around">
           <Grid item>
             <TextField
@@ -170,8 +172,8 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               helperText={errors.nazwisko}
             />
           </Grid>
-          </Grid>
-          <Grid container justifyContent="space-around">
+        </Grid>
+        <Grid container justifyContent="space-around">
           <Grid item>
             <TextField
               id="phoneNumber"
@@ -195,7 +197,6 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               error={Boolean(errors.numerTelefonu)}
               helperText={errors.numerTelefonu}
               disabled={isLocked} // Zablokowany przycisk
-
             />
           </Grid>
           <Grid item>
@@ -213,8 +214,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               helperText={errors.adresMailowy}
               disabled={isLocked} // Zablokowany przycisk
             />
-          <Grid item>
-          </Grid>
+            <Grid item></Grid>
           </Grid>
         </Grid>
         <Grid container justifyContent="space-around">
@@ -255,7 +255,6 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               error={Boolean(errors.kodPocztowy)}
               helperText={errors.kodPocztowy}
               disabled={isLocked} // Zablokowany przycisk
-
             />
           </Grid>
         </Grid>
@@ -298,13 +297,13 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               id="serviceType"
               name="serviceType"
               options={services}
-              getOptionLabel={(option) => option.label || ''}
-              value={services.find((option) => option.label === appointment.serviceType) || null}
-              isOptionEqualToValue={(option, value) => option.label === value.label}
+              getOptionLabel={(option) => option.title || ''}
+              value={services.find((option) => option.title === appointment.serviceType) || null}
+              isOptionEqualToValue={(option, value) => option.title === value.title}
               onChange={(e, newValue) => {
                 setAppointment((prevState) => ({
                   ...prevState,
-                  serviceType: newValue ? newValue.label : ''
+                  serviceType: newValue ? newValue.title : ''
                 }));
               }}
               disabled={isLocked} // Zablokowane pole
@@ -374,28 +373,26 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
 
         {/* Przycisk Zapisz */}
         <Grid container>
-        <Grid item>
-  <Button
-    id="submitButton"
-    variant="success"
-    type="submit"
-    style={{ marginTop: '10px', marginRight: '10px' }} // Tutaj jest 10px marginesu
-    disabled={isLocked}
-  >
-    {t('Edit')}
-  </Button>
-</Grid>
-<Grid item>
-  <Button
-    id="cancelButton"
-    variant="danger"
-    onClick={onCloseModal}
-    style={{ marginTop: '10px' }} // Zmieniono na 10px, aby zrównać z Edit
-    disabled={false}
-  >
-    {t('Cancel')}
-  </Button>
-</Grid>
+          <Grid item>
+            <Button
+              id="submitButton"
+              variant="success"
+              type="submit"
+              style={{ marginTop: '10px', marginRight: '10px' }} // Tutaj jest 10px marginesu
+              disabled={isLocked}>
+              {t('Edit')}
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              id="cancelButton"
+              variant="danger"
+              onClick={onCloseModal}
+              style={{ marginTop: '10px' }} // Zmieniono na 10px, aby zrównać z Edit
+              disabled={false}>
+              {t('Cancel')}
+            </Button>
+          </Grid>
         </Grid>
 
         {/* Ikona kłódki */}
@@ -407,7 +404,7 @@ export default function AppointmentEditPreviewForm({ onCloseModal, onConfirm, se
               style={{
                 position: 'absolute',
                 bottom: '10px',
-                right: '10px',
+                right: '10px'
               }}>
               {isLocked ? <LockIcon /> : <LockOpenIcon />}
             </Button>
